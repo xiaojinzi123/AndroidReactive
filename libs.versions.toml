@@ -1,0 +1,47 @@
+[versions]
+compileSdk = "34"
+targetSdk = "34"
+minSdk = "21"
+xiaojinzi_android_support = "v1.0-beta208"
+compose = "1.5.4"
+lifecycle = "2.6.2"
+lottie = "6.3.0"
+kcomponent = "v1.0.8-rc5"
+kotlin = "1.9.0"
+ksp = "1.9.0-1.0.13"
+agp = "8.2.2"
+kotlinCompilerExtensionVersion = "1.5.1"
+junit = "4.13.2"
+androidx-test-ext-junit = "1.1.5"
+espresso-core = "3.5.1"
+material = "1.11.0"
+
+[libraries]
+androidx_core = { group = "androidx.core", name = "core-ktx", version = "1.12.0" }
+androidx_appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
+xiaojinzi_android_support_ktx = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-ktx", version.ref = "xiaojinzi_android_support" }
+xiaojinzi_android_support_annotation = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-annotation", version.ref = "xiaojinzi_android_support" }
+xiaojinzi_android_support_compose = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-compose", version.ref = "xiaojinzi_android_support" }
+compose_runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose" }
+compose_runtime_android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "compose" }
+compose_ui_android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "compose" }
+compose_foundation_android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "compose" }
+lifecycle_viewmodel_compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lottie_compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+kcomponent_core = { group = "com.github.xiaojinzi123.KComponent", name = "kcomponent", version.ref = "kcomponent" }
+kcomponent_compiler = { group = "com.github.xiaojinzi123.KComponent", name = "kcomponent-compiler", version.ref = "kcomponent" }
+kcomponent_gradleplugin = { group = "com.github.xiaojinzi123.KComponent", name = "kcomponent-plugin", version.ref = "kcomponent" }
+
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradlePlugin-api = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = {group = "com.google.devtools.ksp", name = "symbol-processing-gradle-plugin", version.ref = "ksp" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+[plugins]
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id ="com.android.library", version.ref = "agp" }

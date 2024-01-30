@@ -9,6 +9,12 @@
 - reactive-demo 是为了展示各种场景以及演示响应式的书写方式写的一些 Demo 代码
 - build-logic 是为了简化每个模块的 gradle 配置. **此模块你不需要理会, 只是我这里项目中 Gradle 的一种配置方式, 你自己用你自己熟悉的即可**
 
+## 架构图
+
+![image](https://github.com/xiaojinzi123/AndroidReactive/assets/12975743/5f9a8bbb-6a7f-4c73-9bf2-fee15dd8a348)
+
+![image](https://github.com/xiaojinzi123/AndroidReactive/assets/12975743/3c2b92d9-bb75-4996-af5e-581a2e62c710)
+
 ## 使用
 
 ### 项目中依赖 

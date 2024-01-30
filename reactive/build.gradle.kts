@@ -3,9 +3,6 @@ plugins {
     id("maven-publish")
 }
 
-/*group = "com.github.xiaojinzi123"
-archivesName.set("android-reactive")*/
-
 android {
     namespace = "com.xiaojinzi.reactive"
     kotlinOptions {
@@ -29,12 +26,21 @@ dependencies {
 
 }
 
-/*
-tasks.register<Jar>("androidSourcesJar", ) {
-    archiveClassifier.set("sources")
-    from(android.sourceSets["main"].java.srcDirs)
+tasks.configureEach {
+    if (this.name == "generateMetadataFileForReleasePublication") {
+        this.dependsOn("androidSourcesJar")
+    }
 }
 
-artifacts {
-    archives("androidSourcesJar")
-}*/
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "com.github.xiaojinzi123"
+                artifactId = "android-reactive"
+                version = "0.0.1"
+            }
+        }
+    }
+}

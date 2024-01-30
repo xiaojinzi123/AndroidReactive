@@ -26,6 +26,16 @@ dependencies {
 
 }
 
+// androidSourcesJar task
+tasks.register<Jar>("androidSourcesJar") {
+    archiveClassifier.set("sources")
+    from(android.sourceSets["main"].java.srcDirs)
+}
+
+artifacts {
+    archives(tasks.getAt("androidSourcesJar"))
+}
+
 tasks.configureEach {
     if (this.name == "generateMetadataFileForReleasePublication") {
         this.dependsOn("androidSourcesJar")

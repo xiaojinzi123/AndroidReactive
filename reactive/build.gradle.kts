@@ -1,7 +1,11 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 plugins {
     id("commonModulePlugin")
     id("maven-publish")
 }
+
+archivesName.set("reactive-core")
 
 android {
     namespace = "com.xiaojinzi.reactive"

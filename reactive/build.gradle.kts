@@ -1,6 +1,10 @@
 plugins {
     id("commonModulePlugin")
+    id("maven-publish")
 }
+
+/*group = "com.github.xiaojinzi123"
+archivesName.set("android-reactive")*/
 
 android {
     namespace = "com.xiaojinzi.reactive"
@@ -24,3 +28,13 @@ dependencies {
     api(libs.androidx.appcompat)
 
 }
+
+/*
+tasks.register<Jar>("androidSourcesJar", ) {
+    archiveClassifier.set("sources")
+    from(android.sourceSets["main"].java.srcDirs)
+}
+
+artifacts {
+    archives("androidSourcesJar")
+}*/

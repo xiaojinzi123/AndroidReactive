@@ -3,11 +3,12 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.android.gradlePlugin)
-    compileOnly(libs.kotlin.gradlePlugin.api)
-    compileOnly(libs.kotlin.gradlePlugin)
+    implementation(libs.gradle.kotlin.dsl.plugin)
+    implementation(libs.android.gradlePlugin)
+    implementation(libs.kotlin.gradlePlugin.api)
+    implementation(libs.kotlin.gradlePlugin)
     // 依赖 ksp
-    compileOnly(libs.ksp.gradlePlugin)
+    implementation(libs.ksp.gradlePlugin)
     // https://mvnrepository.com/artifact/com.google.devtools.ksp/symbol-processing-api
     // runtimeOnly("com.google.devtools.ksp:symbol-processing-api:1.9.0-1.0.13")
 }
@@ -26,6 +27,10 @@ gradlePlugin {
         register("commonDemoModulePlugin") {
             id = "commonDemoModulePlugin"
             implementationClass = "CommonDemoModulePlugin"
+        }
+        register("androidLibraryPublishPlugin") {
+            id = "androidLibraryPublishPlugin"
+            implementationClass = "AndroidLibraryPublishPlugin"
         }
     }
 }

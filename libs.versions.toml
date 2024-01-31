@@ -32,6 +32,7 @@ kcomponent_core = { group = "com.github.xiaojinzi123.KComponent", name = "kcompo
 kcomponent_compiler = { group = "com.github.xiaojinzi123.KComponent", name = "kcomponent-compiler", version.ref = "kcomponent" }
 kcomponent_gradleplugin = { group = "com.github.xiaojinzi123.KComponent", name = "kcomponent-plugin", version.ref = "kcomponent" }
 
+gradle-kotlin-dsl-plugin = { group = "org.gradle.kotlin", name = "gradle-kotlin-dsl-plugins", version = "4.3.0" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin-api = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }

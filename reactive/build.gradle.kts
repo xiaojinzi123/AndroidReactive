@@ -2,16 +2,11 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
     id("commonModulePlugin")
-    id("maven-publish")
+    id("androidLibraryPublishPlugin")
 }
-
-archivesName.set("reactive-core")
 
 android {
     namespace = "com.xiaojinzi.reactive"
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
 }
 
 dependencies {
@@ -30,21 +25,7 @@ dependencies {
 
 }
 
-// androidSourcesJar task
-tasks.register<Jar>("androidSourcesJar") {
-    archiveClassifier.set("sources")
-    from(android.sourceSets["main"].java.srcDirs)
-}
-
-artifacts {
-    archives(tasks.getAt("androidSourcesJar"))
-}
-
-tasks.configureEach {
-    if (this.name == "generateMetadataFileForReleasePublication") {
-        this.dependsOn("androidSourcesJar")
-    }
-}
+archivesName.set("reactive-core")
 
 afterEvaluate {
     publishing {
@@ -52,7 +33,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
                 groupId = "com.github.xiaojinzi123"
-                artifactId = "android-reactive"
+                artifactId = "android-reactive-core"
                 version = "0.0.1"
             }
         }

@@ -7,6 +7,7 @@ import com.xiaojinzi.reactive.anno.IntentProcess
 import com.xiaojinzi.reactive.template.domain.BusinessUseCase
 import com.xiaojinzi.reactive.template.domain.BusinessUseCaseImpl
 import com.xiaojinzi.support.annotation.StateHotObservable
+import com.xiaojinzi.support.ktx.toStringItemDto
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,8 +78,9 @@ class LoginUseCaseImpl(
                 name = name,
                 password = password,
             )
-        toast(
-            content = "登录成功, 用户名: $name, 密码: $password",
+        confirmDialogOrError(
+            content = "登录成功".toStringItemDto(),
+            negative = null,
         )
     }
 

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,16 +21,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xiaojinzi.reactive.domain.MVIUseCase
 import com.xiaojinzi.reactive.domain.MVIUseCaseImpl
+import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.reactive.template.support.commonHandle
-import com.xiaojinzi.reactive.template.view.CommonAlertDialog
-import com.xiaojinzi.reactive.template.view.CommonErrorView
-import com.xiaojinzi.reactive.template.view.CommonInitDataView
-import com.xiaojinzi.reactive.template.view.CommonLoadingView
 import com.xiaojinzi.support.annotation.HotObservable
 import com.xiaojinzi.support.annotation.NoError
 import com.xiaojinzi.support.compose.util.clickableNoRipple
@@ -229,13 +224,7 @@ inline fun <reified VM : ViewModel> BusinessContentView(
         mutableStateOf(value = false)
     }
     if (isLoading) {
-        CommonLoadingView(
-            modifier = Modifier
-                .size(60.dp)
-                .nothing(),
-        ) {
-            isLoading = false
-        }
+        ReactiveTemplate.loadingView.invoke()
     }
     // 对 ui 控制的一些监听
     LaunchedEffect(key1 = Unit) {
@@ -270,11 +259,7 @@ inline fun <reified VM : ViewModel> BusinessContentView(
         if (needInit) {
             when (viewState) {
                 BusinessUseCase.ViewState.STATE_INIT, BusinessUseCase.ViewState.STATE_LOADING -> {
-                    CommonInitDataView(
-                        modifier = Modifier
-                            .size(60.dp)
-                            .nothing(),
-                    )
+                    ReactiveTemplate.initView.invoke(this)
                 }
 
                 BusinessUseCase.ViewState.STATE_ERROR -> {
@@ -287,11 +272,7 @@ inline fun <reified VM : ViewModel> BusinessContentView(
                             .nothing(),
                         contentAlignment = Alignment.Center,
                     ) {
-                        CommonErrorView(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .nothing(),
-                        )
+                        ReactiveTemplate.errorView.invoke(this)
                     }
                 }
 
@@ -310,20 +291,20 @@ inline fun <reified VM : ViewModel> BusinessContentView(
         }
     }
     dialogContent?.let {
-        CommonAlertDialog(
-            title = dialogContent.title,
-            text = dialogContent.content,
-            cancelText = dialogContent.negative,
-            confirmText = dialogContent.positive,
-            onDismissClick = {
+        ReactiveTemplate.alertDialogView.invoke(
+            dialogContent.title,
+            dialogContent.content,
+            dialogContent.negative,
+            dialogContent.positive,
+            {
                 (vm as? BusinessUseCase)?.confirmDialogResultEventOb?.tryEmit(
                     value = DialogUseCase.ConfirmDialogResultType.CANCEL
                 )
-            },
-        ) {
-            (vm as? BusinessUseCase)?.confirmDialogResultEventOb?.tryEmit(
-                value = DialogUseCase.ConfirmDialogResultType.CONFIRM
-            )
-        }
+            }, {
+                (vm as? BusinessUseCase)?.confirmDialogResultEventOb?.tryEmit(
+                    value = DialogUseCase.ConfirmDialogResultType.CONFIRM
+                )
+            }
+        )
     }
 }

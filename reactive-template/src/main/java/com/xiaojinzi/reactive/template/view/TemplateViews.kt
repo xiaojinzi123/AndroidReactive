@@ -4,13 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,10 +47,10 @@ import com.xiaojinzi.support.ktx.nothing
 import com.xiaojinzi.support.ktx.toStringItemDto
 
 @Composable
-fun CommonAlertDialog(
+fun TemplateAlertDialog(
     cancelText: StringItemDto? = "取消".toStringItemDto(),
     confirmText: StringItemDto? = "确认".toStringItemDto(),
-    title: StringItemDto? = "提示".toStringItemDto(),
+    title: StringItemDto? = null,
     text: StringItemDto? = null,
     onDismissClick: () -> Unit = {},
     onConfirmClick: () -> Unit,
@@ -185,32 +188,32 @@ fun CommonAlertDialog(
 
 
             }
-
         }
 
     }
 }
 
 @Composable
-fun CommonInitDataView(
-    modifier: Modifier = Modifier,
+fun BoxScope.TemplateInitView(
 ) {
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(R.raw.res_loading1)
     )
     LottieAnimation(
-        modifier = modifier,
+        modifier = Modifier
+            .size(60.dp)
+            .nothing(),
         composition = composition,
         iterations = LottieConstants.IterateForever,
     )
 }
 
 @Composable
-fun CommonErrorView(
-    modifier: Modifier = Modifier,
-) {
+fun BoxScope.TemplateErrorView() {
     Column(
-        modifier = modifier,
+        modifier = Modifier
+            .fillMaxSize()
+            .nothing(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -231,20 +234,18 @@ fun CommonErrorView(
 }
 
 @Composable
-fun CommonLoadingView(
-    modifier: Modifier = Modifier,
-    onDismissClick: () -> Unit,
-) {
+fun TemplateLoadingView() {
     Dialog(
         onDismissRequest = {
-            onDismissClick.invoke()
         },
     ) {
         val composition by rememberLottieComposition(
             LottieCompositionSpec.RawRes(R.raw.res_loading1)
         )
         LottieAnimation(
-            modifier = modifier,
+            modifier = Modifier
+                .size(60.dp)
+                .nothing(),
             composition = composition,
             iterations = LottieConstants.IterateForever,
         )

@@ -1,6 +1,5 @@
 package com.xiaojinzi.reactive.template.domain
 
-import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.annotation.Keep
 import androidx.compose.animation.AnimatedVisibility
@@ -29,8 +28,6 @@ import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.support.annotation.HotObservable
 import com.xiaojinzi.support.compose.util.clickableNoRipple
 import com.xiaojinzi.support.ktx.MutableSharedStateFlow
-import com.xiaojinzi.support.ktx.app
-import com.xiaojinzi.support.ktx.contentWithContext
 import com.xiaojinzi.support.ktx.launchIgnoreError
 import com.xiaojinzi.support.ktx.nothing
 import com.xiaojinzi.support.ktx.timeAtLeast
@@ -208,12 +205,8 @@ inline fun <reified VM : ViewModel> BusinessContentView(
                     }
                     .launchIn(scope = this)
                 vm.tipEventOb
-                    .onEach { tipContent ->
-                        Toast.makeText(
-                            app,
-                            tipContent.content.contentWithContext(context = app),
-                            tipContent.toastLength,
-                        ).show()
+                    .onEach { content ->
+                        ReactiveTemplate.tipHandle.invoke(content)
                     }
                     .launchIn(scope = this)
             }

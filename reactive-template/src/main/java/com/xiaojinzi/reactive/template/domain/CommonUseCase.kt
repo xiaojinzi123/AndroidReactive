@@ -1,14 +1,13 @@
 package com.xiaojinzi.reactive.template.domain
 
-import android.widget.Toast
 import androidx.annotation.Keep
-import androidx.annotation.StringRes
 import com.xiaojinzi.reactive.domain.BaseUseCase
 import com.xiaojinzi.reactive.domain.BaseUseCaseImpl
 import com.xiaojinzi.reactive.template.support.CommonBusinessException
 import com.xiaojinzi.support.annotation.PublishHotObservable
 import com.xiaojinzi.support.annotation.StateHotObservable
 import com.xiaojinzi.support.bean.StringItemDto
+import com.xiaojinzi.support.ktx.NormalMutableSharedFlow
 import com.xiaojinzi.support.ktx.launchIgnoreError
 import com.xiaojinzi.support.ktx.toStringItemDto
 import kotlinx.coroutines.channels.BufferOverflow
@@ -134,22 +133,11 @@ class DialogUseCaseImpl : BaseUseCaseImpl(), DialogUseCase {
  */
 interface CommonUseCase : BaseUseCase, DialogUseCase {
 
-    enum class TipType {
-        Toast
-    }
-
-    @Keep
-    data class TipBean(
-        val type: TipType = TipType.Toast,
-        val toastLength: Int = Toast.LENGTH_SHORT,
-        val content: StringItemDto,
-    )
-
     @StateHotObservable
     val isLoadingOb: Flow<Boolean>
 
     @PublishHotObservable
-    val tipEventOb: Flow<TipBean>
+    val tipEventOb: Flow<StringItemDto>
 
     @PublishHotObservable
     val activityFinishEventOb: Flow<Unit>
@@ -167,27 +155,7 @@ interface CommonUseCase : BaseUseCase, DialogUseCase {
     /**
      * 提示
      */
-    fun tip(value: TipBean)
-
-    fun toast(@StringRes contentResId: Int, toastLength: Int = Toast.LENGTH_SHORT) {
-        tip(
-            TipBean(
-                type = TipType.Toast,
-                content = contentResId.toStringItemDto(),
-                toastLength = toastLength,
-            )
-        )
-    }
-
-    fun toast(content: String, toastLength: Int = Toast.LENGTH_SHORT) {
-        tip(
-            TipBean(
-                type = TipType.Toast,
-                content = content.toStringItemDto(),
-                toastLength = toastLength,
-            )
-        )
-    }
+    fun tip(content: StringItemDto)
 
     /**
      * 投递界面销毁的事件
@@ -207,17 +175,9 @@ class CommonUseCaseImpl(
 
     override val isLoadingOb: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    override val tipEventOb: MutableSharedFlow<CommonUseCase.TipBean> = MutableSharedFlow(
-        replay = 0,
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    override val tipEventOb = NormalMutableSharedFlow<StringItemDto>()
 
-    override val activityFinishEventOb: MutableSharedFlow<Unit> = MutableSharedFlow(
-        replay = 0,
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    override val activityFinishEventOb = NormalMutableSharedFlow<Unit>()
 
     override fun showLoading() {
         isLoadingOb.value = true
@@ -227,12 +187,12 @@ class CommonUseCaseImpl(
         isLoadingOb.value = false
     }
 
-    override fun tip(value: CommonUseCase.TipBean) {
-        tipEventOb.tryEmit(value)
+    override fun tip(content: StringItemDto) {
+        tipEventOb.add(value = content)
     }
 
     override fun postActivityFinishEvent() {
-        activityFinishEventOb.tryEmit(Unit)
+        activityFinishEventOb.add(Unit)
     }
 
     override fun destroy() {

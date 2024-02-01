@@ -33,30 +33,7 @@ class App : Application() {
                 .build(),
         )
 
-        ReactiveTemplate.init(
-            enableInit = true,
-            initView = {
-                TemplateInitView()
-            },
-            errorView = {
-                TemplateErrorView()
-            },
-            loadingView = {
-                TemplateLoadingView()
-            },
-            alertDialogView = { title, text, cancelText, confirmText, onDismissCallback, onConfirmCallback ->
-                TemplateAlertDialog(
-                    title = title,
-                    text = text,
-                    cancelText = cancelText,
-                    confirmText = confirmText,
-                    onDismissClick = onDismissCallback,
-                    onConfirmClick = onConfirmCallback,
-                )
-            },
-            errorHandle = {
-            },
-        )
+        ReactiveTemplate.init()
 
     }
 

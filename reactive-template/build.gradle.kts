@@ -12,6 +12,12 @@ android {
 dependencies {
     implementation(kotlin("reflect"))
     api(project(":reactive"))
+    api(libs.xiaojinzi.android.support.compose)
+    api(libs.compose.runtime)
+    api(libs.compose.runtime.android)
+    api(libs.compose.ui.android)
+    api(libs.compose.foundation.android)
+    api(libs.lifecycle.viewmodel.compose)
     api(libs.lottie.compose)
 }
 

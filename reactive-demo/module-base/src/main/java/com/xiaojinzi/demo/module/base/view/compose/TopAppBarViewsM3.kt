@@ -39,8 +39,8 @@ import com.xiaojinzi.support.ktx.tryFinishActivity
 fun AppbarNormalM3(
     backIcon: ImageVector = Icons.Filled.ArrowBack,
     backClickListener: (() -> Unit)? = null,
-    containerColor: Color = MaterialTheme.colorScheme.secondary,
-    contentColor: Color = MaterialTheme.colorScheme.onSecondary,
+    containerColor: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
     title: StringItemDto? = null,
     titleTextAlign: TextAlign = TextAlign.Center,
     @DrawableRes

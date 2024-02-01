@@ -118,14 +118,15 @@ private fun LoginView(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(horizontal = 0.dp, vertical = 26.dp),
-                enabled = previewDefault?.canSubmit?: canSubmit,
+                enabled = previewDefault?.canSubmit ?: canSubmit,
                 onClick = {
                     vm.addIntent(
                         intent = LoginIntent.Submit(
                             context = context,
                         )
                     )
-                }) {
+                },
+            ) {
                 Text(text = "登录")
             }
 

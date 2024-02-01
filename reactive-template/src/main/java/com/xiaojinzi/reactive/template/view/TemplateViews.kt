@@ -24,12 +24,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -66,7 +62,6 @@ fun TemplateAlertDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .background(Color.Transparent)
                 .nothing(),
             contentAlignment = Alignment.Center
         ) {
@@ -75,7 +70,9 @@ fun TemplateAlertDialog(
                     .fillMaxWidth(fraction = 0.85F)
                     .wrapContentHeight()
                     .clip(shape = RoundedCornerShape(12.dp))
-                    .background(Color.White)
+                    .background(
+                        color = MaterialTheme.colorScheme.surface,
+                    )
                     .padding(horizontal = 24.dp)
                     .nothing(),
             ) {
@@ -94,10 +91,8 @@ fun TemplateAlertDialog(
                         }
                         .nothing(),
                     text = title?.contentWithComposable().orEmpty(),
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        color = Color(0xFF151515),
-                        fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        color = MaterialTheme.colorScheme.onSurface,
                     ),
                     textAlign = TextAlign.Center,
                 )
@@ -109,18 +104,16 @@ fun TemplateAlertDialog(
                             } else {
                                 top.linkTo(titleText.bottom, margin = 24.dp)
                             }
-                            width = Dimension.matchParent
+                            width = Dimension.fillToConstraints
                             start.linkTo(parent.start, margin = 0.dp)
                             end.linkTo(parent.end, margin = 0.dp)
                         }
                         .nothing(),
                     text = text?.contentWithComposable().orEmpty(),
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        color = Color(0xFF999999),
-                        fontWeight = FontWeight.Normal,
-                        textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onSurface,
                     ),
+                    textAlign = TextAlign.Center,
                 )
 
                 Row(
@@ -144,17 +137,15 @@ fun TemplateAlertDialog(
                             modifier = Modifier
                                 .weight(1F)
                                 .circleClip()
-                                .background(color = Color(0xFFF7F7F7))
+                                .background(color = MaterialTheme.colorScheme.primaryContainer)
                                 .clickable {
                                     onDismissClick()
                                 }
                                 .padding(vertical = 10.dp)
                                 .nothing(),
                             text = cancelText.contentWithComposable(),
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                color = Color.Black,
-                                fontWeight = FontWeight.Normal,
+                            style = MaterialTheme.typography.labelLarge.copy(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
                             ),
                             textAlign = TextAlign.Center,
                         )
@@ -176,10 +167,8 @@ fun TemplateAlertDialog(
                             .nothing(),
                         text = (confirmText
                             ?: "确认".toStringItemDto()).contentWithComposable(),
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.Normal,
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            color = MaterialTheme.colorScheme.onPrimary,
                         ),
                         textAlign = TextAlign.Center,
                     )
@@ -229,7 +218,12 @@ fun BoxScope.TemplateErrorView() {
             iterations = LottieConstants.IterateForever,
         )
         Spacer(modifier = Modifier.height(10.dp))
-        Text(text = "页面开小差了, 点击空白处重试")
+        Text(
+            text = "页面开小差了, 点击空白处重试",
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+        )
     }
 }
 

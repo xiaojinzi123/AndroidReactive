@@ -78,7 +78,8 @@ class LoginUseCaseImpl(
                 name = name,
                 password = password,
             )
-        confirmDialogOrError(
+        confirmDialog(
+            title = "提示".toStringItemDto(),
             content = "登录成功".toStringItemDto(),
             negative = null,
         )

@@ -79,7 +79,7 @@ class LoginUseCaseImpl(
                 password = password,
             )
         confirmDialog(
-            title = "提示".toStringItemDto(),
+            // title = "提示".toStringItemDto(),
             content = "登录成功".toStringItemDto(),
             negative = null,
         )

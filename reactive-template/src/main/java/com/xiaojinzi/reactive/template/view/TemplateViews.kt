@@ -100,9 +100,9 @@ fun TemplateAlertDialog(
                     modifier = Modifier
                         .constrainAs(content) {
                             if (title == null) {
-                                top.linkTo(parent.top, margin = 40.dp)
+                                top.linkTo(parent.top, margin = 32.dp)
                             } else {
-                                top.linkTo(titleText.bottom, margin = 24.dp)
+                                top.linkTo(titleText.bottom, margin = 16.dp)
                             }
                             width = Dimension.fillToConstraints
                             start.linkTo(parent.start, margin = 0.dp)

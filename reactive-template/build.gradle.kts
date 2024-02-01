@@ -1,12 +1,15 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
-    id("commonModulePlugin")
+    id("commonLibPlugin")
     id("androidLibraryPublishPlugin")
 }
 
 android {
     namespace = "com.xiaojinzi.reactive.template"
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {

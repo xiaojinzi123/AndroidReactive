@@ -6,7 +6,7 @@ import org.gradle.kotlin.dsl.artifacts
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
 
-class AndroidLibraryPublishPlugin : CommonModulePlugin() {
+class AndroidLibraryPublishPlugin : CommonLibPlugin() {
 
     override fun apply(project: Project) {
         super.apply(project)

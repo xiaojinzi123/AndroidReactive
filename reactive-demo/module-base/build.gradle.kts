@@ -1,12 +1,12 @@
 plugins {
-    id("commonModulePlugin")
+    id("commonLibPlugin")
     id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.xiaojinzi.demo.module.base"
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    buildFeatures {
+        compose = true
     }
 }
 

@@ -1,14 +1,20 @@
+import com.android.build.gradle.LibraryExtension
 import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
-class CommonDemoModulePlugin : CommonModulePlugin() {
+class CommonDemoModulePlugin : CommonLibPlugin() {
 
     override fun apply(project: Project) {
         super.apply(project)
         with(project) {
             plugins.apply {
                 apply("com.google.devtools.ksp")
+            }
+            extensions.configure<LibraryExtension> {
+                buildFeatures {
+                    compose = true
+                }
             }
             extensions.configure<KspExtension> {
                 var tempProject: Project = project

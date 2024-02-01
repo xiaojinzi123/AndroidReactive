@@ -20,10 +20,6 @@ gradlePlugin {
             id = "commonLibPlugin"
             implementationClass = "CommonLibPlugin"
         }
-        register("commonModulePlugin") {
-            id = "commonModulePlugin"
-            implementationClass = "CommonModulePlugin"
-        }
         register("commonDemoModulePlugin") {
             id = "commonDemoModulePlugin"
             implementationClass = "CommonDemoModulePlugin"

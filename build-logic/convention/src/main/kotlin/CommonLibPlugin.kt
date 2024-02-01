@@ -25,7 +25,6 @@ open class CommonLibPlugin : Plugin<Project> {
                 if (this.findPlugin("org.jetbrains.kotlin.android") == null) {
                     apply("org.jetbrains.kotlin.android")
                 }
-                // apply<KotlinPluginWrapper>()
             }
             extensions.configure<LibraryExtension> {
                 compileSdk = libs.findVersion("compileSdk").get().toString().toInt()

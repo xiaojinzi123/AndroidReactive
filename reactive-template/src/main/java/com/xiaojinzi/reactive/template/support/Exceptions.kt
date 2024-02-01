@@ -67,9 +67,7 @@ fun Throwable.commonHandle(
 ) {
     this.getCommonHandleMessage(
         defStringRsd = defStringRsd,
-    ).apply {
-        println("123123")
-    }?.run {
+    )?.run {
         Toast.makeText(
             context,
             this.contentWithContext(),

@@ -2,6 +2,7 @@ package com.xiaojinzi.reactive.template
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import com.xiaojinzi.reactive.template.support.commonHandle
 import com.xiaojinzi.reactive.template.view.TemplateAlertDialog
 import com.xiaojinzi.reactive.template.view.TemplateErrorView
 import com.xiaojinzi.reactive.template.view.TemplateInitView
@@ -10,6 +11,11 @@ import com.xiaojinzi.support.bean.StringItemDto
 
 object ReactiveTemplate {
 
+    val ErrorHandleDefault: (Throwable) -> Unit = {
+        it.commonHandle()
+    }
+
+    private var _enableInit: Boolean = true
     private var _initView: @Composable (BoxScope.() -> Unit)? = null
     private var _errorView: @Composable (BoxScope.() -> Unit)? = null
     private var _loadingView: @Composable (() -> Unit)? = null
@@ -19,8 +25,10 @@ object ReactiveTemplate {
         onDismissCallback: () -> Unit, onConfirmCallback: () -> Unit
     ) -> Unit
     )? = null
+    private var _errorHandle: (Throwable) -> Unit = ErrorHandleDefault
 
     fun init(
+        enableInit: Boolean = true,
         initView: @Composable (BoxScope.() -> Unit)? = null,
         errorView: @Composable (BoxScope.() -> Unit)? = null,
         loadingView: @Composable (() -> Unit)? = null,
@@ -30,26 +38,32 @@ object ReactiveTemplate {
             onDismissCallback: () -> Unit, onConfirmCallback: () -> Unit
         ) -> Unit
         )? = null,
+        errorHandle: (Throwable) -> Unit = ErrorHandleDefault,
     ) {
+        this._enableInit = enableInit
         this._initView = initView
         this._errorView = errorView
         this._loadingView = loadingView
         this._alertDialogView = alertDialogView
+        _errorHandle = errorHandle
     }
 
-    var initView: @Composable (BoxScope.() -> Unit) = _initView ?: {
+    val enableInit: Boolean
+        get() = _enableInit
+
+    val initView: @Composable (BoxScope.() -> Unit) = _initView ?: {
         TemplateInitView()
     }
 
-    var errorView: @Composable (BoxScope.() -> Unit) = _errorView ?: {
+    val errorView: @Composable (BoxScope.() -> Unit) = _errorView ?: {
         TemplateErrorView()
     }
 
-    var loadingView: @Composable (() -> Unit) = _loadingView ?: {
+    val loadingView: @Composable (() -> Unit) = _loadingView ?: {
         TemplateLoadingView()
     }
 
-    var alertDialogView: @Composable (
+    val alertDialogView: @Composable (
         (
         title: StringItemDto?, text: StringItemDto?, cancelText: StringItemDto?, confirmText: StringItemDto?,
         onDismissCallback: () -> Unit, onConfirmCallback: () -> Unit
@@ -65,5 +79,9 @@ object ReactiveTemplate {
                 onConfirmClick = onConfirmCallback
             )
         }
+
+    val errorHandle: (Throwable) -> Unit
+        get() = _errorHandle
+
 
 }

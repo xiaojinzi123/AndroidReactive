@@ -26,9 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xiaojinzi.reactive.domain.MVIUseCase
 import com.xiaojinzi.reactive.domain.MVIUseCaseImpl
 import com.xiaojinzi.reactive.template.ReactiveTemplate
-import com.xiaojinzi.reactive.template.support.commonHandle
 import com.xiaojinzi.support.annotation.HotObservable
-import com.xiaojinzi.support.annotation.NoError
 import com.xiaojinzi.support.compose.util.clickableNoRipple
 import com.xiaojinzi.support.ktx.MutableSharedStateFlow
 import com.xiaojinzi.support.ktx.app
@@ -74,16 +72,6 @@ interface BusinessUseCase : MVIUseCase, CommonUseCase {
      */
     fun retryInit()
 
-    /**
-     * 执行任务, 自带 Loading
-     * 需要自己的 usecase 实现 [CommonUseCase] 接口
-     */
-    @NoError
-    fun executeJobWithLoading(job: suspend () -> Unit)
-
-    @Throws(Exception::class)
-    suspend fun blockingExecuteJobWithLoading(job: suspend () -> Unit)
-
 }
 
 open class BusinessUseCaseImpl(
@@ -98,7 +86,7 @@ open class BusinessUseCaseImpl(
     protected fun onIntentProcessError(
         intent: Any, error: Throwable,
     ) {
-        error.commonHandle()
+        ReactiveTemplate.errorHandle.invoke(error)
     }
 
     /**
@@ -154,29 +142,6 @@ open class BusinessUseCaseImpl(
         }
     }
 
-    @NoError
-    override fun executeJobWithLoading(job: suspend () -> Unit) {
-        scope.launchIgnoreError {
-            blockingExecuteJobWithLoading(job = job)
-        }.invokeOnCompletion { error ->
-            error?.commonHandle()
-        }
-    }
-
-    override suspend fun blockingExecuteJobWithLoading(job: suspend () -> Unit) {
-        val commonUseCase = this as? CommonUseCase
-        try {
-            commonUseCase?.showLoading()
-            timeAtLeast {
-                job.invoke()
-            }
-        } catch (error: Exception) {
-            error.commonHandle()
-        } finally {
-            commonUseCase?.hideLoading()
-        }
-    }
-
     override fun destroy() {
         super.destroy()
         commonUseCase.destroy()
@@ -194,10 +159,12 @@ inline fun <reified VM : ViewModel> BusinessContentView(
         .fillMaxWidth()
         .fillMaxHeight()
         .nothing(),
-    needInit: Boolean = true,
+    // null 表示走配置
+    needInit: Boolean? = null,
     contentAlignment: Alignment = Alignment.Center,
     noinline content: @Composable BoxScope.(vm: VM) -> Unit,
 ) {
+    val needInitReal = needInit ?: ReactiveTemplate.enableInit
     val context = LocalContext.current
     val vm: VM = viewModel()
     val viewState = when (vm) {
@@ -256,7 +223,7 @@ inline fun <reified VM : ViewModel> BusinessContentView(
         modifier = modifier,
         contentAlignment = contentAlignment,
     ) {
-        if (needInit) {
+        if (needInitReal) {
             when (viewState) {
                 BusinessUseCase.ViewState.STATE_INIT, BusinessUseCase.ViewState.STATE_LOADING -> {
                     ReactiveTemplate.initView.invoke(this)

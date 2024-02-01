@@ -34,7 +34,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 @ExperimentalFoundationApi
 @Composable
 private fun LoginView(
-    needInit: Boolean = true,
+    needInit: Boolean? = null,
     previewDefault: LoginPreviewDefault? = null,
 ) {
     val context = LocalContext.current

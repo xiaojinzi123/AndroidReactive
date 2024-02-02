@@ -30,6 +30,7 @@
             <option value="$PROJECT_DIR$/reactive-demo/module-base" />
             <option value="$PROJECT_DIR$/reactive-demo/module-user" />
             <option value="$PROJECT_DIR$/reactive-template" />
+            <option value="$PROJECT_DIR$/reactive-template-compose" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

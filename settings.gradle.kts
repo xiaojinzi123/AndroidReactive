@@ -29,6 +29,7 @@ rootProject.name = "AndroidReactive"
 include(":reactive-demo:app")
 include(":reactive")
 include(":reactive-template")
+include(":reactive-template-compose")
 include(":reactive-demo:module-base")
 include(":reactive-demo:module-user")
 include(":reactive-demo:lib-res")

@@ -32,8 +32,8 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
                 groupId = "com.github.xiaojinzi123"
-                artifactId = "android-reactive-template"
-                version = "0.0.1"
+                artifactId = "reactive-template"
+                version = libs.versions.publish.get()
             }
         }
     }

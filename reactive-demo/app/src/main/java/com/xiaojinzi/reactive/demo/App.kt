@@ -5,10 +5,7 @@ import android.content.Context
 import com.xiaojinzi.component.Component
 import com.xiaojinzi.component.Config
 import com.xiaojinzi.reactive.template.ReactiveTemplate
-import com.xiaojinzi.reactive.template.view.TemplateAlertDialog
-import com.xiaojinzi.reactive.template.view.TemplateErrorView
-import com.xiaojinzi.reactive.template.view.TemplateInitView
-import com.xiaojinzi.reactive.template.view.TemplateLoadingView
+import com.xiaojinzi.reactive.template.ReactiveTemplateCompose
 import com.xiaojinzi.support.init.AppInstance
 
 class App : Application() {
@@ -33,7 +30,8 @@ class App : Application() {
                 .build(),
         )
 
-        ReactiveTemplate.init()
+        ReactiveTemplate.config()
+        ReactiveTemplateCompose.config()
 
     }
 

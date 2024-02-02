@@ -18,6 +18,7 @@ dependencies {
 
     api(project(":reactive"))
     api(project(":reactive-template"))
+    api(project(":reactive-template-compose"))
     api(project(":reactive-demo:lib-res"))
 
     api(libs.kcomponent.core)

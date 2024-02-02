@@ -2,38 +2,13 @@ package com.xiaojinzi.reactive.template.domain
 
 import androidx.annotation.CallSuper
 import androidx.annotation.Keep
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xiaojinzi.reactive.domain.MVIUseCase
 import com.xiaojinzi.reactive.domain.MVIUseCaseImpl
 import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.support.annotation.HotObservable
-import com.xiaojinzi.support.compose.util.clickableNoRipple
 import com.xiaojinzi.support.ktx.MutableSharedStateFlow
 import com.xiaojinzi.support.ktx.launchIgnoreError
-import com.xiaojinzi.support.ktx.nothing
 import com.xiaojinzi.support.ktx.timeAtLeast
-import com.xiaojinzi.support.ktx.tryFinishActivity
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KCallable
 
 interface BusinessUseCase : MVIUseCase, CommonUseCase {
@@ -148,123 +123,4 @@ open class BusinessUseCaseImpl(
         retryInit()
     }
 
-}
-
-@Composable
-inline fun <reified VM : ViewModel> BusinessContentView(
-    modifier: Modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()
-        .nothing(),
-    // null 表示走配置
-    needInit: Boolean? = null,
-    contentAlignment: Alignment = Alignment.Center,
-    noinline content: @Composable BoxScope.(vm: VM) -> Unit,
-) {
-    val needInitReal = needInit ?: ReactiveTemplate.enableInit
-    val context = LocalContext.current
-    val vm: VM = viewModel()
-    val viewState = when (vm) {
-        is BusinessUseCase -> {
-            val pageInitState by vm.pageInitStateObservableDto.collectAsState(initial = BusinessUseCase.ViewState.STATE_INIT)
-            pageInitState
-        }
-
-        else -> {
-            BusinessUseCase.ViewState.STATE_SUCCESS
-        }
-    }
-    val dialogContent = when (vm) {
-        is DialogUseCase -> {
-            val dialogContent by vm.confirmDialogStateOb.collectAsState(initial = null)
-            dialogContent
-        }
-
-        else -> {
-            null
-        }
-    }
-    var isLoading by remember {
-        mutableStateOf(value = false)
-    }
-    if (isLoading) {
-        ReactiveTemplate.loadingView.invoke()
-    }
-    // 对 ui 控制的一些监听
-    LaunchedEffect(key1 = Unit) {
-        when (vm) {
-            is CommonUseCase -> {
-                vm.activityFinishEventOb
-                    .onEach {
-                        context.tryFinishActivity()
-                    }
-                    .launchIn(scope = this)
-                vm.isLoadingOb
-                    .onEach { isShow ->
-                        isLoading = isShow
-                    }
-                    .launchIn(scope = this)
-                vm.tipEventOb
-                    .onEach { content ->
-                        ReactiveTemplate.tipHandle.invoke(content)
-                    }
-                    .launchIn(scope = this)
-            }
-        }
-    }
-    Box(
-        modifier = modifier,
-        contentAlignment = contentAlignment,
-    ) {
-        if (needInitReal) {
-            when (viewState) {
-                BusinessUseCase.ViewState.STATE_INIT, BusinessUseCase.ViewState.STATE_LOADING -> {
-                    ReactiveTemplate.initView.invoke(this)
-                }
-
-                BusinessUseCase.ViewState.STATE_ERROR -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clickableNoRipple {
-                                (vm as? BusinessUseCase)?.retryInit()
-                            }
-                            .nothing(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        ReactiveTemplate.errorView.invoke(this)
-                    }
-                }
-
-                BusinessUseCase.ViewState.STATE_SUCCESS -> {
-                    content(vm)
-                }
-            }
-        } else {
-            AnimatedVisibility(
-                visible = true,
-                enter = fadeIn(),
-                exit = fadeOut(),
-            ) {
-                content(vm)
-            }
-        }
-    }
-    dialogContent?.let {
-        ReactiveTemplate.alertDialogView.invoke(
-            dialogContent.title,
-            dialogContent.content,
-            dialogContent.negative,
-            dialogContent.positive,
-            {
-                (vm as? BusinessUseCase)?.confirmDialogResultEventOb?.tryEmit(
-                    value = DialogUseCase.ConfirmDialogResultType.CANCEL
-                )
-            }, {
-                (vm as? BusinessUseCase)?.confirmDialogResultEventOb?.tryEmit(
-                    value = DialogUseCase.ConfirmDialogResultType.CONFIRM
-                )
-            }
-        )
-    }
 }

@@ -73,21 +73,24 @@ open class BusinessUseCaseImpl(
         if (isAutoLoading) {
             showLoading()
         }
-        kotlin.runCatching {
-            super.onIntentProcess(
-                kCallable = kCallable,
-                intent = intent,
-            )
-        }.apply {
-            this.exceptionOrNull()?.let {
-                onIntentProcessError(
+        try {
+            kotlin.runCatching {
+                super.onIntentProcess(
+                    kCallable = kCallable,
                     intent = intent,
-                    error = it,
                 )
+            }.apply {
+                this.exceptionOrNull()?.let {
+                    onIntentProcessError(
+                        intent = intent,
+                        error = it,
+                    )
+                }
             }
-        }
-        if (isAutoLoading) {
-            hideLoading()
+        } finally {
+            if (isAutoLoading) {
+                hideLoading()
+            }
         }
     }
 

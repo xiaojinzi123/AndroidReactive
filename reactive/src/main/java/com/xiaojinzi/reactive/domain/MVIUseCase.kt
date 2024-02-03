@@ -3,6 +3,7 @@ package com.xiaojinzi.reactive.domain
 import androidx.annotation.CallSuper
 import androidx.annotation.Keep
 import com.xiaojinzi.reactive.anno.IntentProcess
+import com.xiaojinzi.support.ktx.LogSupport
 import com.xiaojinzi.support.ktx.NormalMutableSharedFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -65,6 +66,10 @@ interface IntentAddResult {
  * 不可以用代理的模式去使用, 比如 BaseUseCase by mviUseCase
  */
 interface MVIUseCase : BaseUseCase {
+
+    companion object {
+        const val TAG = "MVIUseCase"
+    }
 
     /**
      * 添加一个意图, 返回一个 [IntentAddResult] 对象, 通过这个对象可以等待意图处理完成
@@ -188,7 +193,10 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
         // 处理意图
         intentEvent
             .onEach { intent ->
-                println("准备处理意图：$intent")
+                LogSupport.d(
+                    tag = MVIUseCase.TAG,
+                    content = "准备处理意图：$intent",
+                )
                 val intentProcessResult = runCatching {
                     intentProcessMethodMap.get(
                         key = intent::class
@@ -201,6 +209,9 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
                 }
                 intentProcessResultEvent.add(
                     value = intentProcessResult.exceptionOrNull()?.let {
+                        if (LogSupport.logAble) {
+                            it.printStackTrace()
+                        }
                         IntentProcessResult.Fail(
                             intent = intent,
                             error = it,
@@ -209,7 +220,10 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
                         intent = intent,
                     )
                 )
-                println("处理完毕意图：$intent")
+                LogSupport.d(
+                    tag = MVIUseCase.TAG,
+                    content = "处理完毕意图：$intent",
+                )
             }
             .launchIn(scope = scope)
 

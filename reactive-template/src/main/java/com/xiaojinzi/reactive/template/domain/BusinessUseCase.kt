@@ -2,6 +2,7 @@ package com.xiaojinzi.reactive.template.domain
 
 import androidx.annotation.CallSuper
 import androidx.annotation.Keep
+import androidx.annotation.MainThread
 import com.xiaojinzi.reactive.domain.MVIUseCase
 import com.xiaojinzi.reactive.domain.MVIUseCaseImpl
 import com.xiaojinzi.reactive.template.ReactiveTemplate
@@ -60,6 +61,7 @@ open class BusinessUseCaseImpl(
     override val pageInitStateObservableDto =
         MutableSharedStateFlow(initValue = BusinessUseCase.ViewState.STATE_INIT)
 
+    @MainThread
     override fun onIntentProcessError(
         intent: Any, error: Throwable,
     ) {

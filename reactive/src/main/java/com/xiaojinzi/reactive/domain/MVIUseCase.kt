@@ -2,6 +2,7 @@ package com.xiaojinzi.reactive.domain
 
 import androidx.annotation.CallSuper
 import androidx.annotation.Keep
+import androidx.annotation.MainThread
 import com.xiaojinzi.reactive.anno.IntentProcess
 import com.xiaojinzi.support.ktx.LogSupport
 import com.xiaojinzi.support.ktx.NormalMutableSharedFlow
@@ -142,6 +143,7 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
         }
     }
 
+    @MainThread
     protected open fun onIntentProcessError(
         intent: Any, error: Throwable,
     ) {
@@ -216,10 +218,12 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
                     }
                 }.apply {
                     this.exceptionOrNull()?.let {
-                        onIntentProcessError(
-                            intent = intent,
-                            error = it,
-                        )
+                        withContext(context = Dispatchers.Main) {
+                            onIntentProcessError(
+                                intent = intent,
+                                error = it,
+                            )
+                        }
                     }
                 }
                 LogSupport.d(

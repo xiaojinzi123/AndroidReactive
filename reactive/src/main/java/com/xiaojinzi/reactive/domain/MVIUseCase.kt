@@ -142,6 +142,7 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
     }
 
     @CallSuper
+    @Throws(Exception::class)
     protected open suspend fun onIntentProcess(
         kCallable: KCallable<*>,
         intent: Any,
@@ -207,6 +208,10 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
                         )
                     }
                 }
+                LogSupport.d(
+                    tag = MVIUseCase.TAG,
+                    content = "意图处理结果: ${intentProcessResult.isSuccess}",
+                )
                 intentProcessResultEvent.add(
                     value = intentProcessResult.exceptionOrNull()?.let {
                         if (LogSupport.logAble) {

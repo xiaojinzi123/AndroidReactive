@@ -65,6 +65,7 @@ open class BusinessUseCaseImpl(
      * 自定义拦截处理, 判断是否有注解 AutoLoading 注解, 然后执行前后加上 loading 的显示和隐藏
      */
     @CallSuper
+    @Throws(Exception::class)
     final override suspend fun onIntentProcess(kCallable: KCallable<*>, intent: Any) {
         // 判断是否有注解 AutoLoading
         val isAutoLoading = kCallable.annotations.any {
@@ -87,6 +88,8 @@ open class BusinessUseCaseImpl(
                     )
                 }
             }
+        } catch (e: Exception) {
+            throw e
         } finally {
             if (isAutoLoading) {
                 hideLoading()

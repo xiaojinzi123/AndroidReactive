@@ -9,21 +9,21 @@ import com.xiaojinzi.support.ktx.toStringItemDto
 
 object ReactiveTemplate {
 
-    val TipHandleDefault: (StringItemDto) -> Unit = {
+    private val TipHandleDefault: (StringItemDto) -> Unit = {
         Toast.makeText(
             app,
             it.contentWithContext(context = app),
             Toast.LENGTH_SHORT,
         ).show()
     }
-    val ErrorHandleDefault: (Throwable) -> Unit = {
+    private val ErrorHandleDefault: (Throwable) -> Unit = {
         it.commonHandle()
     }
-    val ErrorDefault: StringItemDto = "未知错误".toStringItemDto()
+    private val ErrorDefaultDefault: StringItemDto = "未知错误".toStringItemDto()
 
     private var _tipHandle: (StringItemDto) -> Unit = TipHandleDefault
     private var _errorHandle: (Throwable) -> Unit = ErrorHandleDefault
-    private var _errorDefault: StringItemDto = ErrorDefault
+    private var _errorDefault: StringItemDto = ErrorDefaultDefault
 
     /**
      * 可选的初始化, 参数也都是可选的!!!
@@ -31,7 +31,7 @@ object ReactiveTemplate {
     fun config(
         tipHandle: (StringItemDto) -> Unit = TipHandleDefault,
         errorHandle: (Throwable) -> Unit = ErrorHandleDefault,
-        errorDefault: StringItemDto = ErrorDefault,
+        errorDefault: StringItemDto = ErrorDefaultDefault,
     ) {
         _tipHandle = tipHandle
         _errorHandle = errorHandle

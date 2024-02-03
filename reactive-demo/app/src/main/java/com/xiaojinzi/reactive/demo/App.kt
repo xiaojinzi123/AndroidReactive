@@ -7,12 +7,14 @@ import com.xiaojinzi.component.Config
 import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.reactive.template.ReactiveTemplateCompose
 import com.xiaojinzi.support.init.AppInstance
+import com.xiaojinzi.support.ktx.LogSupport
 
 class App : Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         AppInstance.app = this
+        LogSupport.logAble = BuildConfig.DEBUG
     }
 
     override fun onCreate() {

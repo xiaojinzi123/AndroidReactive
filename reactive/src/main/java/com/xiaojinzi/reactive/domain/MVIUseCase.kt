@@ -10,6 +10,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.selects.select
@@ -141,6 +142,12 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
         }
     }
 
+    protected open fun onIntentProcessError(
+        intent: Any, error: Throwable,
+    ) {
+        // empty
+    }
+
     @CallSuper
     @Throws(Exception::class)
     protected open suspend fun onIntentProcess(
@@ -207,6 +214,13 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
                             intent = intent,
                         )
                     }
+                }.apply {
+                    this.exceptionOrNull()?.let {
+                        onIntentProcessError(
+                            intent = intent,
+                            error = it,
+                        )
+                    }
                 }
                 LogSupport.d(
                     tag = MVIUseCase.TAG,
@@ -214,9 +228,6 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
                 )
                 intentProcessResultEvent.add(
                     value = intentProcessResult.exceptionOrNull()?.let {
-                        if (LogSupport.logAble) {
-                            it.printStackTrace()
-                        }
                         IntentProcessResult.Fail(
                             intent = intent,
                             error = it,
@@ -230,6 +241,7 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
                     content = "处理完毕意图：$intent",
                 )
             }
+            .flowOn(context = Dispatchers.IO)
             .launchIn(scope = scope)
 
     }

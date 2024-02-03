@@ -6,12 +6,17 @@ import com.xiaojinzi.reactive.domain.MVIUseCase
 import com.xiaojinzi.reactive.domain.MVIUseCaseImpl
 import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.support.annotation.HotObservable
+import com.xiaojinzi.support.ktx.LogSupport
 import com.xiaojinzi.support.ktx.MutableSharedStateFlow
 import com.xiaojinzi.support.ktx.launchIgnoreError
 import com.xiaojinzi.support.ktx.timeAtLeast
 import kotlin.reflect.KCallable
 
 interface BusinessUseCase : MVIUseCase, CommonUseCase {
+
+    companion object {
+        const val TAG = "BusinessUseCase"
+    }
 
     @Retention(value = AnnotationRetention.RUNTIME)
     @Target(
@@ -55,7 +60,7 @@ open class BusinessUseCaseImpl(
     override val pageInitStateObservableDto =
         MutableSharedStateFlow(initValue = BusinessUseCase.ViewState.STATE_INIT)
 
-    protected fun onIntentProcessError(
+    override fun onIntentProcessError(
         intent: Any, error: Throwable,
     ) {
         ReactiveTemplate.errorHandle.invoke(error)
@@ -75,20 +80,14 @@ open class BusinessUseCaseImpl(
             showLoading()
         }
         try {
-            kotlin.runCatching {
-                super.onIntentProcess(
-                    kCallable = kCallable,
-                    intent = intent,
-                )
-            }.apply {
-                this.exceptionOrNull()?.let {
-                    onIntentProcessError(
-                        intent = intent,
-                        error = it,
-                    )
-                }
-            }
+            super.onIntentProcess(
+                kCallable = kCallable,
+                intent = intent,
+            )
         } catch (e: Exception) {
+            if (LogSupport.logAble) {
+                e.printStackTrace()
+            }
             throw e
         } finally {
             if (isAutoLoading) {

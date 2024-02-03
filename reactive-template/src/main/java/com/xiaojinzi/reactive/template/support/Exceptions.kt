@@ -16,15 +16,24 @@ open class ReactiveTemplateBusinessException(
     cause: Throwable? = null,
 ) : RuntimeException(messageStringItem?.contentWithContext() ?: "", cause)
 
-fun Throwable.getCommonHandleMessage(
+fun Throwable.getReactiveTemplateHandleMessage(
     defString: StringItemDto? = null,
+    custom: (Throwable) -> StringItemDto? = ReactiveTemplate.errorCustom,
 ): StringItemDto? {
 
     var currentThrowable: Throwable = this
 
+    var customResult: StringItemDto? = null
+
     do {
 
+        customResult = custom.invoke(currentThrowable)
+
         when {
+
+            customResult != null -> {
+                return custom.invoke(currentThrowable)
+            }
 
             currentThrowable is ReactiveTemplateBusinessException -> {
                 return currentThrowable.messageStringItem
@@ -61,12 +70,14 @@ fun Throwable.getCommonHandleMessage(
 /**
  * 错误的常见处理
  */
-fun Throwable.commonHandle(
+fun Throwable.reactiveTemplateHandle(
     context: Context = app,
     defString: StringItemDto? = ReactiveTemplate.errorDefault,
+    custom: (Throwable) -> StringItemDto? = ReactiveTemplate.errorCustom,
 ) {
-    this.getCommonHandleMessage(
+    this.getReactiveTemplateHandleMessage(
         defString = defString,
+        custom = custom,
     )?.run {
         Toast.makeText(
             context,

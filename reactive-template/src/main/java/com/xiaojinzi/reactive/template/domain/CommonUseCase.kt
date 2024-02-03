@@ -3,7 +3,7 @@ package com.xiaojinzi.reactive.template.domain
 import androidx.annotation.Keep
 import com.xiaojinzi.reactive.domain.BaseUseCase
 import com.xiaojinzi.reactive.domain.BaseUseCaseImpl
-import com.xiaojinzi.reactive.template.support.CommonBusinessException
+import com.xiaojinzi.reactive.template.support.ReactiveTemplateBusinessException
 import com.xiaojinzi.support.annotation.PublishHotObservable
 import com.xiaojinzi.support.annotation.StateHotObservable
 import com.xiaojinzi.support.bean.StringItemDto
@@ -81,7 +81,7 @@ interface DialogUseCase : BaseUseCase {
             positive = positive,
         ).apply {
             if (this != ConfirmDialogResultType.CONFIRM) {
-                throw CommonBusinessException()
+                throw ReactiveTemplateBusinessException()
             }
         }
     }

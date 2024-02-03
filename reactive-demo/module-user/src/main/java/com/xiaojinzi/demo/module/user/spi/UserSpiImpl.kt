@@ -3,8 +3,9 @@ package com.xiaojinzi.demo.module.user.spi
 import com.xiaojinzi.component.anno.ServiceAnno
 import com.xiaojinzi.demo.lib.res.user.UserInfoDto
 import com.xiaojinzi.demo.module.base.spi.UserSpi
-import com.xiaojinzi.reactive.template.support.CommonBusinessException
+import com.xiaojinzi.reactive.template.support.ReactiveTemplateBusinessException
 import com.xiaojinzi.support.ktx.MutableSharedStateFlow
+import com.xiaojinzi.support.ktx.toStringItemDto
 
 @ServiceAnno(UserSpi::class)
 class UserSpiImpl : UserSpi {
@@ -15,8 +16,8 @@ class UserSpiImpl : UserSpi {
 
     override suspend fun login(name: String, password: String) {
         if ("admin" != name || "123" != password) {
-            throw CommonBusinessException(
-                message = "账号或者密码错误",
+            throw ReactiveTemplateBusinessException(
+                messageStringItem = "账号或者密码错误".toStringItemDto(),
             )
         }
         userInfoStateOb.emit(

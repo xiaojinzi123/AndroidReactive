@@ -2,22 +2,22 @@ package com.xiaojinzi.reactive.template.support
 
 import android.content.Context
 import android.widget.Toast
+import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.support.bean.StringItemDto
-import com.xiaojinzi.support.init.AppInstance.app
+import com.xiaojinzi.support.ktx.app
 import com.xiaojinzi.support.ktx.contentWithContext
 import com.xiaojinzi.support.ktx.toStringItemDto
 
 /**
  * 表示业务异常
  */
-open class CommonBusinessException(
-    val messageRsd: Int? = null,
-    message: String? = null,
+open class ReactiveTemplateBusinessException(
+    val messageStringItem: StringItemDto? = null,
     cause: Throwable? = null,
-) : RuntimeException(message, cause)
+) : RuntimeException(messageStringItem?.contentWithContext() ?: "", cause)
 
 fun Throwable.getCommonHandleMessage(
-    defStringRsd: Int? = null,
+    defString: StringItemDto? = null,
 ): StringItemDto? {
 
     var currentThrowable: Throwable = this
@@ -26,8 +26,8 @@ fun Throwable.getCommonHandleMessage(
 
         when {
 
-            currentThrowable is CommonBusinessException -> {
-                return currentThrowable.messageRsd?.toStringItemDto()
+            currentThrowable is ReactiveTemplateBusinessException -> {
+                return currentThrowable.messageStringItem
                     ?: currentThrowable.message?.toStringItemDto()
             }
 
@@ -54,7 +54,7 @@ fun Throwable.getCommonHandleMessage(
 
     } while (true)
 
-    return defStringRsd?.toStringItemDto()
+    return defString
 
 }
 
@@ -63,10 +63,10 @@ fun Throwable.getCommonHandleMessage(
  */
 fun Throwable.commonHandle(
     context: Context = app,
-    defStringRsd: Int? = null,
+    defString: StringItemDto? = ReactiveTemplate.errorDefault,
 ) {
     this.getCommonHandleMessage(
-        defStringRsd = defStringRsd,
+        defString = defString,
     )?.run {
         Toast.makeText(
             context,

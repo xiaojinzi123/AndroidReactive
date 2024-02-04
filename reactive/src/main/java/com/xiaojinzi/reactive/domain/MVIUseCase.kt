@@ -8,6 +8,9 @@ import com.xiaojinzi.support.ktx.LogSupport
 import com.xiaojinzi.support.ktx.NormalMutableSharedFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
@@ -85,16 +88,16 @@ interface MVIUseCase : BaseUseCase {
  */
 open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
 
-    private val intentEvent = NormalMutableSharedFlow<Any>()
+    private val intentEvent = Channel<Any>(
+        capacity = Channel.Factory.UNLIMITED,
+        onBufferOverflow = BufferOverflow.SUSPEND,
+    )
 
     private val intentProcessResultEvent = NormalMutableSharedFlow<IntentProcessResult>()
 
     private val intentProcessMethodMap = mutableMapOf<KClass<*>, KCallable<*>>()
-
     override fun addIntent(intent: Any): IntentAddResult {
-        intentEvent.tryEmit(
-            value = intent,
-        )
+        intentEvent.trySend(element = intent)
         return object : IntentAddResult {
 
             private val targetIntent: Any = intent
@@ -202,6 +205,7 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
 
         // 处理意图
         intentEvent
+            .consumeAsFlow()
             .onEach { intent ->
                 LogSupport.d(
                     tag = MVIUseCase.TAG,

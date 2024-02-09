@@ -10,10 +10,11 @@
 项目结构解释
 
 - reactive 响应式的业务架构的核心组件, 需要在项目中进行依赖
-- reactive-template 核心组件之外的通用的业务. 
+- reactive-template 核心组件之外的通用的业务组件(可选的)
   - 使用方式1: 直接依赖此模板模块, 通过调用 ReactiveTemplate.init() 方法来自定义一些默认的视图和事件
   - 使用方式2: 在你的新项目创建之后, 复制此模块的代码到你的项目中, 比如 Base 业务模块中
-
+- reactive-template-compose 是通用业务组件的 Compose 的形式的
+- reactive-template-normal 是通用业务组件非 Compose 形式的(未开发, 因为我用 Compose 两年了, 这个模块的空缺请自行填补吧)
 - reactive-demo 是为了展示各种场景以及演示响应式的书写方式写的一些 Demo 代码
 - build-logic 是为了简化每个模块的 gradle 配置. **此模块你不需要理会, 只是我这里项目中 Gradle 的一种配置方式, 你自己用你自己熟悉的即可**
 

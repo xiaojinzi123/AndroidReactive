@@ -27,12 +27,18 @@ fun Throwable.getReactiveTemplateHandleMessage(
 
     do {
 
+        // 如果需要忽略, 那就返回 null
+        if (ReactiveTemplate.errorCustomIgnore.invoke(currentThrowable)) {
+            return null
+        }
+
+        // 自定义处理的返回 null 表示没匹配到
         customResult = custom.invoke(currentThrowable)
 
         when {
 
             customResult != null -> {
-                return custom.invoke(currentThrowable)
+                return customResult
             }
 
             currentThrowable is ReactiveTemplateBusinessException -> {

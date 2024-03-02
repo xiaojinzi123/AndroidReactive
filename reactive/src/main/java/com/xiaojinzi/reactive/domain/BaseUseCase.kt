@@ -4,6 +4,7 @@ import androidx.annotation.CallSuper
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 
+
 /**
  * 这个接口中的方法不可以新增了哦!!!
  * 这个 BaseUseCase 由于每一个 UseCase 都要继承

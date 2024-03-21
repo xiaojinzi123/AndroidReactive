@@ -47,7 +47,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.xiaojinzi.reactive.template.R
+import com.xiaojinzi.reactive.template.compose.R
 import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.reactive.template.ReactiveTemplateCompose
 import com.xiaojinzi.reactive.template.domain.BusinessUseCase
@@ -207,7 +207,7 @@ fun TemplateAlertDialog(
 fun BoxScope.TemplateInitView(
 ) {
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(R.raw.res_loading1)
+        LottieCompositionSpec.RawRes(R.raw.reactive_template_compose_loading1)
     )
     LottieAnimation(
         modifier = Modifier
@@ -228,7 +228,7 @@ fun BoxScope.TemplateErrorView() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val composition by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.res_error1)
+            LottieCompositionSpec.RawRes(R.raw.reactive_template_compose_error1)
         )
         LottieAnimation(
             modifier = Modifier
@@ -255,7 +255,7 @@ fun TemplateLoadingView() {
         },
     ) {
         val composition by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.res_loading1)
+            LottieCompositionSpec.RawRes(R.raw.reactive_template_compose_loading1)
         )
         LottieAnimation(
             modifier = Modifier

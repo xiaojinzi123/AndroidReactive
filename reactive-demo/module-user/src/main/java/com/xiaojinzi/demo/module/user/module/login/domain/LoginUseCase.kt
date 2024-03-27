@@ -65,7 +65,7 @@ class LoginUseCaseImpl(
     }
 
     @BusinessUseCase.AutoLoading
-    @IntentProcess(LoginIntent.Submit::class)
+    @IntentProcess
     private suspend fun login(
         intent: LoginIntent.Submit,
     ) {

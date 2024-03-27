@@ -6,8 +6,11 @@ import androidx.annotation.MainThread
 import com.xiaojinzi.reactive.anno.IntentProcess
 import com.xiaojinzi.support.ktx.LogSupport
 import com.xiaojinzi.support.ktx.NormalMutableSharedFlow
+import com.xiaojinzi.support.ktx.launchIgnoreError
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -27,7 +30,7 @@ import kotlin.reflect.jvm.isAccessible
 private class IntentMethodException(
     method: KCallable<*>,
     intentProcess: IntentProcess,
-) : RuntimeException("方法 $method 必须是 suspend 标记的, 并且方法参数只能是一个, 类型必须是：${intentProcess.value.java}")
+) : RuntimeException("方法 $method 必须是 suspend 标记的, 并且方法参数只能是一个")
 
 @Keep
 private sealed class IntentProcessResult(
@@ -96,6 +99,9 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
     private val intentProcessResultEvent = NormalMutableSharedFlow<IntentProcessResult>()
 
     private val intentProcessMethodMap = mutableMapOf<KClass<*>, KCallable<*>>()
+
+    private val taskScope = MainScope()
+
     override fun addIntent(intent: Any): IntentAddResult {
         intentEvent.trySend(element = intent)
         return object : IntentAddResult {
@@ -165,6 +171,60 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
         )
     }
 
+    override fun destroy() {
+        super.destroy()
+        taskScope.cancel()
+    }
+
+    /**
+     * 处理意图
+     */
+    private fun intentProcess(intent: Any) {
+        taskScope.launchIgnoreError(context = Dispatchers.IO) {
+            LogSupport.d(
+                tag = MVIUseCase.TAG,
+                content = "准备处理意图：$intent",
+            )
+            val intentProcessResult = runCatching {
+                intentProcessMethodMap.get(
+                    key = intent::class
+                )?.run {
+                    onIntentProcess(
+                        kCallable = this,
+                        intent = intent,
+                    )
+                }
+            }.apply {
+                this.exceptionOrNull()?.let {
+                    withContext(context = Dispatchers.Main) {
+                        onIntentProcessError(
+                            intent = intent,
+                            error = it,
+                        )
+                    }
+                }
+            }
+            LogSupport.d(
+                tag = MVIUseCase.TAG,
+                content = "意图处理结果: ${intentProcessResult.isSuccess}",
+            )
+            intentProcessResultEvent.add(
+                value = intentProcessResult.exceptionOrNull()?.let {
+                    IntentProcessResult.Fail(
+                        intent = intent,
+                        error = it,
+                    )
+                } ?: IntentProcessResult.Success(
+                    intent = intent,
+                )
+            )
+            LogSupport.d(
+                tag = MVIUseCase.TAG,
+                content = "处理完毕意图：$intent",
+            )
+        }
+    }
+
     init {
 
         // 收集意图
@@ -184,15 +244,16 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
 
                 intentProcessAnno?.let {
                     if (method.parameters.size == 2) {
-                        if (method.parameters[1].type.classifier != intentProcessAnno.value) {
+                        val intentClassifier = method.parameters[1].type.classifier as? KClass<*>
+                        /*if (intentClassifier != intentProcessAnno.value) {
                             throw IntentMethodException(
                                 method = method,
                                 intentProcess = intentProcessAnno,
                             )
+                        }*/
+                        intentClassifier?.let {
+                            intentProcessMethodMap[it] = method
                         }
-                        intentProcessMethodMap[
-                            intentProcessAnno.value
-                        ] = method
                     } else {
                         throw IntentMethodException(
                             method = method,
@@ -207,46 +268,8 @@ open class MVIUseCaseImpl : BaseUseCaseImpl(), MVIUseCase {
         intentEvent
             .consumeAsFlow()
             .onEach { intent ->
-                LogSupport.d(
-                    tag = MVIUseCase.TAG,
-                    content = "准备处理意图：$intent",
-                )
-                val intentProcessResult = runCatching {
-                    intentProcessMethodMap.get(
-                        key = intent::class
-                    )?.run {
-                        onIntentProcess(
-                            kCallable = this,
-                            intent = intent,
-                        )
-                    }
-                }.apply {
-                    this.exceptionOrNull()?.let {
-                        withContext(context = Dispatchers.Main) {
-                            onIntentProcessError(
-                                intent = intent,
-                                error = it,
-                            )
-                        }
-                    }
-                }
-                LogSupport.d(
-                    tag = MVIUseCase.TAG,
-                    content = "意图处理结果: ${intentProcessResult.isSuccess}",
-                )
-                intentProcessResultEvent.add(
-                    value = intentProcessResult.exceptionOrNull()?.let {
-                        IntentProcessResult.Fail(
-                            intent = intent,
-                            error = it,
-                        )
-                    } ?: IntentProcessResult.Success(
-                        intent = intent,
-                    )
-                )
-                LogSupport.d(
-                    tag = MVIUseCase.TAG,
-                    content = "处理完毕意图：$intent",
+                intentProcess(
+                    intent = intent,
                 )
             }
             .flowOn(context = Dispatchers.IO)

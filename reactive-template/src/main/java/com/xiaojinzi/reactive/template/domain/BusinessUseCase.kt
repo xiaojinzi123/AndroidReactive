@@ -113,7 +113,9 @@ open class BusinessUseCaseImpl(
                     value = BusinessUseCase.ViewState.STATE_SUCCESS
                 )
             } catch (e: Exception) {
-                // e.printStackTrace()
+                if (ReactiveTemplate.isDebug) {
+                    e.printStackTrace()
+                }
                 pageInitStateObservableDto.emit(
                     value = BusinessUseCase.ViewState.STATE_ERROR
                 )

@@ -23,6 +23,7 @@ object ReactiveTemplate {
     private val ErrorCustomDefault: (Throwable) -> StringItemDto? = { null }
     private val ErrorCustomIgnoreDefault: (Throwable) -> Boolean = { false }
 
+    private var _isDebug: Boolean = false
     private var _tipHandle: (StringItemDto) -> Unit = TipHandleDefault
     private var _errorHandle: (Throwable) -> Unit = ErrorHandleDefault
     private var _errorDefault: StringItemDto = ErrorDefaultDefault
@@ -35,18 +36,23 @@ object ReactiveTemplate {
      * @param errorCustomIgnore 表示需要忽略的错误, 自行匹配
      */
     fun config(
+        isDebug: Boolean = false,
         tipHandle: (StringItemDto) -> Unit = TipHandleDefault,
         errorHandle: (Throwable) -> Unit = ErrorHandleDefault,
         errorDefault: StringItemDto = ErrorDefaultDefault,
         errorCustom: (Throwable) -> StringItemDto? = ErrorCustomDefault,
         errorCustomIgnore: (Throwable) -> Boolean = ErrorCustomIgnoreDefault,
     ) {
+        _isDebug = isDebug
         _tipHandle = tipHandle
         _errorHandle = errorHandle
         _errorDefault = errorDefault
         _errorCustom = errorCustom
         _errorCustomIgnore = errorCustomIgnore
     }
+
+    val isDebug: Boolean
+        get() = _isDebug
 
     val tipHandle: (StringItemDto) -> Unit
         get() = _tipHandle

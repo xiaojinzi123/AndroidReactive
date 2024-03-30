@@ -32,7 +32,9 @@ class App : Application() {
                 .build(),
         )
 
-        ReactiveTemplate.config()
+        ReactiveTemplate.config(
+            isDebug = BuildConfig.DEBUG,
+        )
         ReactiveTemplateCompose.config()
 
     }

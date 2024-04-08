@@ -25,6 +25,15 @@ interface BusinessUseCase : MVIUseCase, CommonUseCase {
     )
     annotation class AutoLoading
 
+    /**
+     * 会忽略错误, 不会抛出异常
+     */
+    @Retention(value = AnnotationRetention.RUNTIME)
+    @Target(
+        AnnotationTarget.FUNCTION,
+    )
+    annotation class ErrorIgnore
+
     @Keep
     enum class ViewState {
         STATE_INIT,
@@ -78,6 +87,10 @@ open class BusinessUseCaseImpl(
         val isAutoLoading = kCallable.annotations.any {
             it is BusinessUseCase.AutoLoading
         }
+        // 判断是否有注解 ErrorIgnore
+        val isErrorIgnore = kCallable.annotations.any {
+            it is BusinessUseCase.ErrorIgnore
+        }
         if (isAutoLoading) {
             showLoading()
         }
@@ -90,7 +103,9 @@ open class BusinessUseCaseImpl(
             if (LogSupport.logAble) {
                 e.printStackTrace()
             }
-            throw e
+            if (!isErrorIgnore) {
+                throw e
+            }
         } finally {
             if (isAutoLoading) {
                 hideLoading()

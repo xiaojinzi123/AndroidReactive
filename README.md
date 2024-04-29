@@ -216,3 +216,10 @@ private suspend fun login(
 对应的效果视频为：
 
 https://github.com/xiaojinzi123/AndroidReactive/assets/12975743/638dca9a-ee6f-4b04-a9ed-7f174258fa3e
+
+## 混淆的配置
+```Text
+-keepclassmembers class * {
+    @com.xiaojinzi.reactive.anno.IntentProcess *;
+}
+```

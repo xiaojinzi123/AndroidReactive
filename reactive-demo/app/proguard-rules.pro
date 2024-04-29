@@ -24,7 +24,7 @@
 
 # ------------------------ 小金子mvvm reactive 框架 start ----------------------
 # 忽略 com.xiaojinzi.reactive.anno.IntentProcess 注解标记的所有方法
--keepclassmembers class * {
+-keepclasseswithmembers class * {
     @com.xiaojinzi.reactive.anno.IntentProcess *;
 }
 # ------------------------ 小金子mvvm reactive 框架 end ----------------------

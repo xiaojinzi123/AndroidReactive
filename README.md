@@ -219,7 +219,8 @@ https://github.com/xiaojinzi123/AndroidReactive/assets/12975743/638dca9a-ee6f-4b
 
 ## 混淆的配置
 ```Text
--keepclassmembers class * {
+# 忽略 com.xiaojinzi.reactive.anno.IntentProcess 注解标记的所有方法
+-keepclasseswithmembers class * {
     @com.xiaojinzi.reactive.anno.IntentProcess *;
 }
 ```

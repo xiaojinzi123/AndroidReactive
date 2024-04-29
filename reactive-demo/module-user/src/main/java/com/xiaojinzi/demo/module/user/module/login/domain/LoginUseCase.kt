@@ -1,6 +1,7 @@
 package com.xiaojinzi.demo.module.user.module.login.domain
 
 import android.content.Context
+import androidx.annotation.Keep
 import androidx.annotation.UiContext
 import com.xiaojinzi.demo.module.base.support.AppServices
 import com.xiaojinzi.reactive.anno.IntentProcess
@@ -64,8 +65,8 @@ class LoginUseCaseImpl(
         name.isNotBlank() && password.isNotBlank()
     }
 
-    @BusinessUseCase.AutoLoading
     @IntentProcess
+    @BusinessUseCase.AutoLoading
     private suspend fun login(
         intent: LoginIntent.Submit,
     ) {

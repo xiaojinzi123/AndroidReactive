@@ -19,3 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn javax.annotation.Nullable
+
+# ------------------------ 小金子mvvm reactive 框架 start ----------------------
+# 忽略 com.xiaojinzi.reactive.anno.IntentProcess 注解标记的所有方法
+-keepclassmembers class * {
+    @com.xiaojinzi.reactive.anno.IntentProcess *;
+}
+# ------------------------ 小金子mvvm reactive 框架 end ----------------------

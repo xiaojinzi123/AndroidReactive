@@ -6,6 +6,28 @@ plugins {
 
 android {
     namespace = "com.xiaojinzi.reactive.demo"
+    signingConfigs {
+        maybeCreate("debug").apply {
+            storeFile = file("./sign")
+            storePassword = "123123"
+            keyAlias = "123123"
+            keyPassword = "123123"
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = true
+        }
+        maybeCreate("release").apply {
+            storeFile = file("./sign")
+            storePassword = "123123"
+            keyAlias = "123123"
+            keyPassword = "123123"
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = true
+        }
+    }
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
         applicationId = "com.xiaojinzi.reactive.demo"
@@ -16,15 +38,18 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+        buildTypes {
+            maybeCreate("debug").apply {
+                signingConfig = signingConfigs.getByName("debug")
+            }
+            maybeCreate("release").apply {
+                isMinifyEnabled = true
+                signingConfig = signingConfigs.getByName("release")
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro",
+                )
+            }
         }
     }
 

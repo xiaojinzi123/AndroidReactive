@@ -85,7 +85,7 @@ fun Throwable.reactiveTemplateHandle(
     this.getReactiveTemplateHandleMessage(
         defString = defString,
         custom = custom,
-    )?.contentWithContext().orNull().let { content ->
+    )?.contentWithContext().orNull()?.let { content ->
         Toast.makeText(
             context,
             content,

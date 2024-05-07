@@ -2,7 +2,7 @@
 compileSdk = "34"
 targetSdk = "34"
 minSdk = "21"
-xiaojinzi_android_support = "v1.0-beta208"
+xiaojinzi_android_support = "v1.0-beta222"
 compose = "1.5.4"
 lifecycle = "2.6.2"
 lottie = "6.3.0"

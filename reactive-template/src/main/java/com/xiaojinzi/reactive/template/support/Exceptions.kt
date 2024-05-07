@@ -6,6 +6,7 @@ import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.support.bean.StringItemDto
 import com.xiaojinzi.support.ktx.app
 import com.xiaojinzi.support.ktx.contentWithContext
+import com.xiaojinzi.support.ktx.orNull
 import com.xiaojinzi.support.ktx.toStringItemDto
 
 /**
@@ -84,10 +85,10 @@ fun Throwable.reactiveTemplateHandle(
     this.getReactiveTemplateHandleMessage(
         defString = defString,
         custom = custom,
-    )?.run {
+    )?.contentWithContext().orNull().let { content ->
         Toast.makeText(
             context,
-            this.contentWithContext(),
+            content,
             Toast.LENGTH_SHORT
         ).show()
     }

@@ -77,6 +77,19 @@ open class BusinessUseCaseImpl(
         ReactiveTemplate.errorHandle.invoke(error)
     }
 
+    protected suspend fun <R> withLoading(block: suspend () -> R): R  {
+        showLoading()
+        return runCatching {
+            block()
+        }.run {
+            hideLoading()
+            this.exceptionOrNull()?.run {
+                throw this
+            }
+            this.getOrThrow()
+        }
+    }
+
     /**
      * 自定义拦截处理, 判断是否有注解 AutoLoading 注解, 然后执行前后加上 loading 的显示和隐藏
      */

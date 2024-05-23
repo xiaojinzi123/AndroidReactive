@@ -66,19 +66,21 @@ class LoginUseCaseImpl(
     }
 
     @IntentProcess
-    @BusinessUseCase.AutoLoading
+    // @BusinessUseCase.AutoLoading
     private suspend fun login(
         intent: LoginIntent.Submit,
     ) {
-        delay(1000)
-        val name = nameStateOb.first()
-        val password = passwordStateOb.first()
-        AppServices
-            .userSpi
-            ?.login(
-                name = name,
-                password = password,
-            )
+        withLoading {
+            delay(1000)
+            val name = nameStateOb.first()
+            val password = passwordStateOb.first()
+            AppServices
+                .userSpi
+                ?.login(
+                    name = name,
+                    password = password,
+                )
+        }
         confirmDialog(
             // title = "提示".toStringItemDto(),
             content = "登录成功".toStringItemDto(),

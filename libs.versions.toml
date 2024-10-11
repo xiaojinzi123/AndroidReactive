@@ -3,23 +3,23 @@ compileSdk = "34"
 targetSdk = "34"
 minSdk = "21"
 xiaojinzi_android_support = "v1.0-beta222"
-compose = "1.5.4"
-lifecycle = "2.6.2"
-lottie = "6.3.0"
+compose = "1.7.3"
+lifecycle = "2.8.6"
+lottie = "6.5.2"
 kcomponent = "v1.0.8-rc5"
-kotlin = "1.9.0"
+kotlin = "1.9.23"
 ksp = "1.9.0-1.0.13"
 agp = "8.2.2"
-kotlinCompilerExtensionVersion = "1.5.1"
+kotlinCompilerExtensionVersion = "1.5.11"
 junit = "4.13.2"
-androidx-test-ext-junit = "1.1.5"
-espresso-core = "3.5.1"
-material = "1.11.0"
+androidx-test-ext-junit = "1.2.1"
+espresso-core = "3.6.1"
+material = "1.12.0"
 publish = "0.0.1"
 
 [libraries]
-androidx_core = { group = "androidx.core", name = "core-ktx", version = "1.12.0" }
-androidx_appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
+androidx_core = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
+androidx_appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
 xiaojinzi_android_support_ktx = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-ktx", version.ref = "xiaojinzi_android_support" }
 xiaojinzi_android_support_annotation = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-annotation", version.ref = "xiaojinzi_android_support" }
 xiaojinzi_android_support_compose = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-compose", version.ref = "xiaojinzi_android_support" }
@@ -33,7 +33,7 @@ kcomponent_core = { group = "com.github.xiaojinzi123.KComponent", name = "kcompo
 kcomponent_compiler = { group = "com.github.xiaojinzi123.KComponent", name = "kcomponent-compiler", version.ref = "kcomponent" }
 kcomponent_gradleplugin = { group = "com.github.xiaojinzi123.KComponent", name = "kcomponent-plugin", version.ref = "kcomponent" }
 
-gradle-kotlin-dsl-plugin = { group = "org.gradle.kotlin", name = "gradle-kotlin-dsl-plugins", version = "4.3.0" }
+gradle-kotlin-dsl-plugin = { group = "org.gradle.kotlin", name = "gradle-kotlin-dsl-plugins", version = "4.4.0" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin-api = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }

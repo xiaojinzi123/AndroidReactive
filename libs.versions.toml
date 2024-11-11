@@ -9,7 +9,7 @@ lottie = "6.6.0"
 kcomponent = "v1.0.8-rc5"
 kotlin = "2.0.21"
 ksp = "2.0.21-1.0.26"
-agp = "8.2.2"
+agp = "8.7.2"
 # kotlinCompilerExtensionVersion = "1.5.15"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.2.1"
@@ -18,7 +18,7 @@ material = "1.12.0"
 publish = "0.0.1"
 
 [libraries]
-androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
+androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
 xiaojinzi-android-support-ktx = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-ktx", version.ref = "xiaojinzi-android-support" }
 xiaojinzi-android-support-annotation = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-annotation", version.ref = "xiaojinzi-android-support" }

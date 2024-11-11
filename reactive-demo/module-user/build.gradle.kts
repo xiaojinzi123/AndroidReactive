@@ -1,5 +1,6 @@
 plugins {
     id("commonDemoModulePlugin")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {

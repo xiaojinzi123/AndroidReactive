@@ -1,6 +1,7 @@
 plugins {
     id("commonLibPlugin")
     id("com.google.devtools.ksp")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {

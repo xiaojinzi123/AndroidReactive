@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
-
 plugins {
     id("commonLibPlugin")
     id("androidLibraryPublishPlugin")
@@ -7,9 +5,6 @@ plugins {
 
 android {
     namespace = "com.xiaojinzi.reactive.template"
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
@@ -24,7 +19,7 @@ dependencies {
     api(libs.lottie.compose)
 }
 
-archivesName.set("reactive-template")
+// archivesName.set("reactive-template")
 
 afterEvaluate {
     publishing {

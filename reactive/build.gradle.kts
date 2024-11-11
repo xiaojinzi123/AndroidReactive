@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
-
 plugins {
     id("commonLibPlugin")
     id("androidLibraryPublishPlugin")
@@ -19,7 +17,7 @@ dependencies {
 
 }
 
-archivesName.set("reactive-core")
+// archivesName.set("reactive-core")
 
 afterEvaluate {
     publishing {

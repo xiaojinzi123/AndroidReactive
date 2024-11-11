@@ -1,8 +1,7 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
-
 plugins {
     id("commonLibPlugin")
     id("androidLibraryPublishPlugin")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -24,7 +23,7 @@ dependencies {
     api(libs.lottie.compose)
 }
 
-archivesName.set("reactive-template-compose")
+// archivesName.set("reactive-template-compose")
 
 afterEvaluate {
     publishing {

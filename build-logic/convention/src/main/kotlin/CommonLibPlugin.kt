@@ -52,8 +52,8 @@ open class CommonLibPlugin : Plugin<Project> {
                     }
                 }
                 composeOptions {
-                    kotlinCompilerExtensionVersion =
-                        libs.findVersion("kotlinCompilerExtensionVersion").get().toString()
+                    /*kotlinCompilerExtensionVersion =
+                        libs.findVersion("kotlinCompilerExtensionVersion").get().toString()*/
                 }
             }
         }

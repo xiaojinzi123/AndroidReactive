@@ -47,10 +47,11 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.xiaojinzi.reactive.template.compose.R
 import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.reactive.template.ReactiveTemplateCompose
+import com.xiaojinzi.reactive.template.compose.R
 import com.xiaojinzi.reactive.template.domain.BusinessMVIUseCase
+import com.xiaojinzi.reactive.template.domain.BusinessUseCase
 import com.xiaojinzi.reactive.template.domain.CommonUseCase
 import com.xiaojinzi.reactive.template.domain.DialogUseCase
 import com.xiaojinzi.support.bean.StringItemDto
@@ -283,12 +284,12 @@ inline fun <reified VM : ViewModel> BusinessContentView(
     val vm: VM = viewModel()
     val viewState = when (vm) {
         is BusinessMVIUseCase -> {
-            val pageInitState by vm.pageInitState.collectAsState(initial = BusinessMVIUseCase.ViewState.STATE_INIT)
+            val pageInitState by vm.pageInitState.collectAsState(initial = BusinessUseCase.ViewState.STATE_INIT)
             pageInitState
         }
 
         else -> {
-            BusinessMVIUseCase.ViewState.STATE_SUCCESS
+            BusinessUseCase.ViewState.STATE_SUCCESS
         }
     }
     val dialogContent = when (vm) {
@@ -335,11 +336,11 @@ inline fun <reified VM : ViewModel> BusinessContentView(
     ) {
         if (needInitReal) {
             when (viewState) {
-                BusinessMVIUseCase.ViewState.STATE_INIT, BusinessMVIUseCase.ViewState.STATE_LOADING -> {
+                BusinessUseCase.ViewState.STATE_INIT, BusinessUseCase.ViewState.STATE_LOADING -> {
                     ReactiveTemplateCompose.initView.invoke(this)
                 }
 
-                BusinessMVIUseCase.ViewState.STATE_ERROR -> {
+                BusinessUseCase.ViewState.STATE_ERROR -> {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -353,7 +354,7 @@ inline fun <reified VM : ViewModel> BusinessContentView(
                     }
                 }
 
-                BusinessMVIUseCase.ViewState.STATE_SUCCESS -> {
+                BusinessUseCase.ViewState.STATE_SUCCESS -> {
                     content(vm)
                 }
             }

@@ -33,7 +33,9 @@ import kotlinx.coroutines.cancel
 interface BaseUseCase {
 
     /**
-     * 销毁
+     * 销毁资源
+     * 此方法会被多次调用, 因为很多 [BaseUseCase] 会被组合使用
+     * 所以很多时候 destroy 会被调用多次, 实现 [destroy] 方法的时候一定要注意这一点
      */
     fun destroy()
 
@@ -44,6 +46,9 @@ interface BaseUseCase {
  */
 open class BaseUseCaseImpl : BaseUseCase {
 
+    /**
+     * 协程作用域, 在 [destroy] 的时候会取消掉
+     */
     val scope = MainScope()
 
     @CallSuper

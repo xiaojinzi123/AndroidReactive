@@ -52,25 +52,6 @@ open class BusinessMVIUseCaseImpl(
         ReactiveTemplate.errorHandle.invoke(error)
     }
 
-    protected suspend fun <R> withLoading(
-        enable: Boolean = true,
-        block: suspend () -> R,
-    ): R {
-        if (!enable) {
-            return block()
-        }
-        showLoading()
-        return runCatching {
-            block()
-        }.run {
-            hideLoading()
-            this.exceptionOrNull()?.run {
-                throw this
-            }
-            this.getOrThrow()
-        }
-    }
-
     /**
      * 自定义拦截处理, 判断是否有注解 AutoLoading 注解, 然后执行前后加上 loading 的显示和隐藏
      */
@@ -85,7 +66,7 @@ open class BusinessMVIUseCaseImpl(
         val isErrorIgnore = kCallable.annotations.any {
             it is BusinessMVIUseCase.ErrorIgnore
         }
-        withLoading(
+        businessUseCase.withLoading(
             enable = isAutoLoading,
         ) {
             try {
@@ -100,31 +81,6 @@ open class BusinessMVIUseCaseImpl(
                 if (!isErrorIgnore) {
                     throw e
                 }
-            }
-        }
-    }
-
-    @Throws(Exception::class)
-    override suspend fun initData() {
-    }
-
-    final override fun retryInit() {
-        scope.launchIgnoreError {
-            try {
-                pageInitState.value = BusinessUseCase.ViewState.STATE_LOADING
-                timeAtLeast {
-                    initData()
-                }
-                pageInitState.emit(
-                    value = BusinessUseCase.ViewState.STATE_SUCCESS
-                )
-            } catch (e: Exception) {
-                if (ReactiveTemplate.isDebug) {
-                    e.printStackTrace()
-                }
-                pageInitState.emit(
-                    value = BusinessUseCase.ViewState.STATE_ERROR
-                )
             }
         }
     }

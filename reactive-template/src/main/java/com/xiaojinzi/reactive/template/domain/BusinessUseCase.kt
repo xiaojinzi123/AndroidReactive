@@ -8,6 +8,7 @@ import com.xiaojinzi.support.annotation.HotObservable
 import com.xiaojinzi.support.ktx.MutableSharedStateFlow
 import com.xiaojinzi.support.ktx.launchIgnoreError
 import com.xiaojinzi.support.ktx.timeAtLeast
+import kotlinx.coroutines.CoroutineScope
 
 interface BusinessUseCase : BaseUseCase, CommonUseCase {
 
@@ -40,6 +41,22 @@ interface BusinessUseCase : BaseUseCase, CommonUseCase {
      */
     fun retryInit()
 
+    /**
+     * 执行一个携程任务, 会忽略错误, 不会抛出异常
+     */
+    fun withTask(
+        errorHandle: ((Throwable) -> Unit)? = null,
+        block: suspend CoroutineScope.() -> Unit
+    )
+
+    /**
+     * 处理 Loading
+     */
+    suspend fun <R> withLoading(
+        enable: Boolean = true,
+        block: suspend () -> R,
+    ): R
+
 }
 
 open class BusinessUseCaseImpl(
@@ -51,7 +68,30 @@ open class BusinessUseCaseImpl(
     override val pageInitState =
         MutableSharedStateFlow(initValue = BusinessUseCase.ViewState.STATE_INIT)
 
-    protected suspend fun <R> withLoading(block: suspend () -> R): R {
+    override fun withTask(
+        errorHandle: ((Throwable) -> Unit)?,
+        block: suspend CoroutineScope.() -> Unit,
+    ) {
+        scope.launchIgnoreError {
+            block.invoke(this)
+        }.invokeOnCompletion { error ->
+            error?.let {
+                if (errorHandle == null) {
+                    ReactiveTemplate.errorHandle.invoke(it)
+                } else {
+                    errorHandle(it)
+                }
+            }
+        }
+    }
+
+    override suspend fun <R> withLoading(
+        enable: Boolean,
+        block: suspend () -> R,
+    ): R {
+        if (!enable) {
+            return block()
+        }
         showLoading()
         return runCatching {
             block()

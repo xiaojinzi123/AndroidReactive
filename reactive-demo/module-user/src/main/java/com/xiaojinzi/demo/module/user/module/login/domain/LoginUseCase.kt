@@ -1,12 +1,11 @@
 package com.xiaojinzi.demo.module.user.module.login.domain
 
 import android.content.Context
-import androidx.annotation.Keep
 import androidx.annotation.UiContext
 import com.xiaojinzi.demo.module.base.support.AppServices
 import com.xiaojinzi.reactive.anno.IntentProcess
-import com.xiaojinzi.reactive.template.domain.BusinessUseCase
-import com.xiaojinzi.reactive.template.domain.BusinessUseCaseImpl
+import com.xiaojinzi.reactive.template.domain.BusinessMVIUseCase
+import com.xiaojinzi.reactive.template.domain.BusinessMVIUseCaseImpl
 import com.xiaojinzi.support.annotation.StateHotObservable
 import com.xiaojinzi.support.ktx.toStringItemDto
 import kotlinx.coroutines.delay
@@ -24,7 +23,7 @@ sealed class LoginIntent {
 
 }
 
-interface LoginUseCase : BusinessUseCase {
+interface LoginUseCase : BusinessMVIUseCase {
 
     @StateHotObservable
     val nameStateOb: MutableStateFlow<String>
@@ -44,7 +43,7 @@ interface LoginUseCase : BusinessUseCase {
 }
 
 class LoginUseCaseImpl(
-) : BusinessUseCaseImpl(), LoginUseCase {
+) : BusinessMVIUseCaseImpl(), LoginUseCase {
 
     override val nameStateOb = MutableStateFlow(value = "")
 

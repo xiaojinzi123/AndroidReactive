@@ -50,7 +50,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.xiaojinzi.reactive.template.compose.R
 import com.xiaojinzi.reactive.template.ReactiveTemplate
 import com.xiaojinzi.reactive.template.ReactiveTemplateCompose
-import com.xiaojinzi.reactive.template.domain.BusinessUseCase
+import com.xiaojinzi.reactive.template.domain.BusinessMVIUseCase
 import com.xiaojinzi.reactive.template.domain.CommonUseCase
 import com.xiaojinzi.reactive.template.domain.DialogUseCase
 import com.xiaojinzi.support.bean.StringItemDto
@@ -282,13 +282,13 @@ inline fun <reified VM : ViewModel> BusinessContentView(
     val context = LocalContext.current
     val vm: VM = viewModel()
     val viewState = when (vm) {
-        is BusinessUseCase -> {
-            val pageInitState by vm.pageInitStateObservableDto.collectAsState(initial = BusinessUseCase.ViewState.STATE_INIT)
+        is BusinessMVIUseCase -> {
+            val pageInitState by vm.pageInitState.collectAsState(initial = BusinessMVIUseCase.ViewState.STATE_INIT)
             pageInitState
         }
 
         else -> {
-            BusinessUseCase.ViewState.STATE_SUCCESS
+            BusinessMVIUseCase.ViewState.STATE_SUCCESS
         }
     }
     val dialogContent = when (vm) {
@@ -335,16 +335,16 @@ inline fun <reified VM : ViewModel> BusinessContentView(
     ) {
         if (needInitReal) {
             when (viewState) {
-                BusinessUseCase.ViewState.STATE_INIT, BusinessUseCase.ViewState.STATE_LOADING -> {
+                BusinessMVIUseCase.ViewState.STATE_INIT, BusinessMVIUseCase.ViewState.STATE_LOADING -> {
                     ReactiveTemplateCompose.initView.invoke(this)
                 }
 
-                BusinessUseCase.ViewState.STATE_ERROR -> {
+                BusinessMVIUseCase.ViewState.STATE_ERROR -> {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .clickableNoRipple {
-                                (vm as? BusinessUseCase)?.retryInit()
+                                (vm as? BusinessMVIUseCase)?.retryInit()
                             }
                             .nothing(),
                         contentAlignment = Alignment.Center,
@@ -353,7 +353,7 @@ inline fun <reified VM : ViewModel> BusinessContentView(
                     }
                 }
 
-                BusinessUseCase.ViewState.STATE_SUCCESS -> {
+                BusinessMVIUseCase.ViewState.STATE_SUCCESS -> {
                     content(vm)
                 }
             }
@@ -374,11 +374,11 @@ inline fun <reified VM : ViewModel> BusinessContentView(
             dialogContent.negative,
             dialogContent.positive,
             {
-                (vm as? BusinessUseCase)?.confirmDialogResultEvent?.tryEmit(
+                (vm as? BusinessMVIUseCase)?.confirmDialogResultEvent?.tryEmit(
                     value = DialogUseCase.ConfirmDialogResultType.CANCEL
                 )
             }, {
-                (vm as? BusinessUseCase)?.confirmDialogResultEvent?.tryEmit(
+                (vm as? BusinessMVIUseCase)?.confirmDialogResultEvent?.tryEmit(
                     value = DialogUseCase.ConfirmDialogResultType.CONFIRM
                 )
             }

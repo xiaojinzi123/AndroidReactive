@@ -13,10 +13,10 @@ import com.xiaojinzi.support.ktx.launchIgnoreError
 import com.xiaojinzi.support.ktx.timeAtLeast
 import kotlin.reflect.KCallable
 
-interface BusinessUseCase : MVIUseCase, CommonUseCase {
+interface BusinessMVIUseCase : MVIUseCase, CommonUseCase {
 
-    companion object {
-        const val TAG = "BusinessUseCase"
+    companion object Companion {
+        const val TAG = "BusinessMVIUseCase"
     }
 
     @Retention(value = AnnotationRetention.RUNTIME)
@@ -46,7 +46,7 @@ interface BusinessUseCase : MVIUseCase, CommonUseCase {
      * 页面状态
      */
     @HotObservable(HotObservable.Pattern.BEHAVIOR, isShared = true)
-    val pageInitStateObservableDto: MutableSharedStateFlow<ViewState>
+    val pageInitState: MutableSharedStateFlow<ViewState>
 
     /**
      * 初始化数据
@@ -61,14 +61,14 @@ interface BusinessUseCase : MVIUseCase, CommonUseCase {
 
 }
 
-open class BusinessUseCaseImpl(
+open class BusinessMVIUseCaseImpl(
     private val commonUseCase: CommonUseCase = CommonUseCaseImpl(),
 ) : MVIUseCaseImpl(),
-    BusinessUseCase,
+    BusinessMVIUseCase,
     CommonUseCase by commonUseCase {
 
-    override val pageInitStateObservableDto =
-        MutableSharedStateFlow(initValue = BusinessUseCase.ViewState.STATE_INIT)
+    override val pageInitState =
+        MutableSharedStateFlow(initValue = BusinessMVIUseCase.ViewState.STATE_INIT)
 
     @MainThread
     override fun onIntentProcessError(
@@ -98,11 +98,11 @@ open class BusinessUseCaseImpl(
     final override suspend fun onIntentProcess(kCallable: KCallable<*>, intent: Any) {
         // 判断是否有注解 AutoLoading
         val isAutoLoading = kCallable.annotations.any {
-            it is BusinessUseCase.AutoLoading
+            it is BusinessMVIUseCase.AutoLoading
         }
         // 判断是否有注解 ErrorIgnore
         val isErrorIgnore = kCallable.annotations.any {
-            it is BusinessUseCase.ErrorIgnore
+            it is BusinessMVIUseCase.ErrorIgnore
         }
         if (isAutoLoading) {
             showLoading()
@@ -133,19 +133,19 @@ open class BusinessUseCaseImpl(
     final override fun retryInit() {
         scope.launchIgnoreError {
             try {
-                pageInitStateObservableDto.value = BusinessUseCase.ViewState.STATE_LOADING
+                pageInitState.value = BusinessMVIUseCase.ViewState.STATE_LOADING
                 timeAtLeast {
                     initData()
                 }
-                pageInitStateObservableDto.emit(
-                    value = BusinessUseCase.ViewState.STATE_SUCCESS
+                pageInitState.emit(
+                    value = BusinessMVIUseCase.ViewState.STATE_SUCCESS
                 )
             } catch (e: Exception) {
                 if (ReactiveTemplate.isDebug) {
                     e.printStackTrace()
                 }
-                pageInitStateObservableDto.emit(
-                    value = BusinessUseCase.ViewState.STATE_ERROR
+                pageInitState.emit(
+                    value = BusinessMVIUseCase.ViewState.STATE_ERROR
                 )
             }
         }

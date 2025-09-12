@@ -293,7 +293,7 @@ inline fun <reified VM : ViewModel> BusinessContentView(
     }
     val dialogContent = when (vm) {
         is DialogUseCase -> {
-            val dialogContent by vm.confirmDialogStateOb.collectAsState(initial = null)
+            val dialogContent by vm.confirmDialogState.collectAsState(initial = null)
             dialogContent
         }
 
@@ -374,11 +374,11 @@ inline fun <reified VM : ViewModel> BusinessContentView(
             dialogContent.negative,
             dialogContent.positive,
             {
-                (vm as? BusinessUseCase)?.confirmDialogResultEventOb?.tryEmit(
+                (vm as? BusinessUseCase)?.confirmDialogResultEvent?.tryEmit(
                     value = DialogUseCase.ConfirmDialogResultType.CANCEL
                 )
             }, {
-                (vm as? BusinessUseCase)?.confirmDialogResultEventOb?.tryEmit(
+                (vm as? BusinessUseCase)?.confirmDialogResultEvent?.tryEmit(
                     value = DialogUseCase.ConfirmDialogResultType.CONFIRM
                 )
             }

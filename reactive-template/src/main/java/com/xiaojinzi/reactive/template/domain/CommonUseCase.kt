@@ -7,6 +7,8 @@ import com.xiaojinzi.reactive.template.support.ReactiveTemplateBusinessException
 import com.xiaojinzi.support.annotation.PublishHotObservable
 import com.xiaojinzi.support.annotation.StateHotObservable
 import com.xiaojinzi.support.bean.StringItemDto
+import com.xiaojinzi.support.ktx.HotEventFlow
+import com.xiaojinzi.support.ktx.HotStateFlow
 import com.xiaojinzi.support.ktx.NormalMutableSharedFlow
 import com.xiaojinzi.support.ktx.launchIgnoreError
 import com.xiaojinzi.support.ktx.toStringItemDto
@@ -37,14 +39,12 @@ interface DialogUseCase : BaseUseCase {
     /**
      * 显示确认对话框的
      */
-    @StateHotObservable
-    val confirmDialogStateOb: MutableStateFlow<ConfirmDialogModel?>
+    val confirmDialogState: MutableStateFlow<ConfirmDialogModel?>
 
     /**
      * 确认的事件
      */
-    @PublishHotObservable
-    val confirmDialogResultEventOb: MutableSharedFlow<ConfirmDialogResultType>
+    val confirmDialogResultEvent: MutableSharedFlow<ConfirmDialogResultType>
 
     suspend fun confirmDialog(
         title: StringItemDto? = null,
@@ -53,7 +53,7 @@ interface DialogUseCase : BaseUseCase {
         positive: StringItemDto? = "确认".toStringItemDto(),
     ): ConfirmDialogResultType {
         // 显示对话框
-        confirmDialogStateOb.emit(
+        confirmDialogState.emit(
             value = ConfirmDialogModel(
                 title = title,
                 content = content,
@@ -61,8 +61,8 @@ interface DialogUseCase : BaseUseCase {
                 positive = positive,
             )
         )
-        return confirmDialogResultEventOb.first().apply {
-            confirmDialogStateOb.emit(
+        return confirmDialogResultEvent.first().apply {
+            confirmDialogState.emit(
                 value = null,
             )
         }
@@ -97,10 +97,10 @@ interface DialogUseCase : BaseUseCase {
 
 class DialogUseCaseImpl : BaseUseCaseImpl(), DialogUseCase {
 
-    override val confirmDialogStateOb: MutableStateFlow<DialogUseCase.ConfirmDialogModel?> =
+    override val confirmDialogState: MutableStateFlow<DialogUseCase.ConfirmDialogModel?> =
         MutableStateFlow(value = null)
 
-    override val confirmDialogResultEventOb: MutableSharedFlow<DialogUseCase.ConfirmDialogResultType> =
+    override val confirmDialogResultEvent: MutableSharedFlow<DialogUseCase.ConfirmDialogResultType> =
         MutableSharedFlow(
             replay = 0,
             extraBufferCapacity = 1,
@@ -114,7 +114,7 @@ class DialogUseCaseImpl : BaseUseCaseImpl(), DialogUseCase {
         positive: StringItemDto?
     ) {
         scope.launchIgnoreError {
-            confirmDialogStateOb.emit(
+            confirmDialogState.emit(
                 value = DialogUseCase.ConfirmDialogModel(
                     title = title,
                     content = content,

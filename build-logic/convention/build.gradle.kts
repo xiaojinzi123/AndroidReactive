@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.gradle.kotlin.dsl.plugin)
     implementation(libs.android.gradlePlugin)
     implementation(libs.kotlin.gradlePlugin.api)
     implementation(libs.kotlin.gradlePlugin)

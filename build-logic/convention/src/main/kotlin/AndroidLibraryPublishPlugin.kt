@@ -25,7 +25,7 @@ class AndroidLibraryPublishPlugin : CommonLibPlugin() {
             extensions.configure<LibraryExtension> {
                 tasks.register<Jar>("androidSourcesJar") {
                     archiveClassifier.set("sources")
-                    from(sourceSets.getAt("main").java.srcDirs)
+                    from(fileTree("src/main/java"), fileTree("src/main/kotlin"))
                 }
             }
             artifacts {

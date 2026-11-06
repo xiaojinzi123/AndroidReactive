@@ -38,10 +38,6 @@ open class CommonLibPlugin : Plugin<Project> {
                     sourceCompatibility(JavaVersion.VERSION_17)
                     targetCompatibility(JavaVersion.VERSION_17)
                 }
-                composeOptions {
-                    /*kotlinCompilerExtensionVersion =
-                        libs.findVersion("kotlinCompilerExtensionVersion").get().toString()*/
-                }
             }
         }
     }

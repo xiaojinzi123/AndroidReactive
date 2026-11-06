@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 plugins {
     id("commonLibPlugin")
     id("com.google.devtools.ksp")
@@ -22,6 +24,7 @@ dependencies {
     api(project(":reactive-template-compose"))
     api(project(":reactive-demo:lib-res"))
 
+    api(libs.compose.material.icons.core)
     api(libs.kcomponent.core)
     ksp(libs.kcomponent.compiler)
 

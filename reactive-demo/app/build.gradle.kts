@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 plugins {
     id("com.android.application")
     id("com.xiaojinzi.kcomponent.plugin")
@@ -32,7 +34,8 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
         applicationId = "com.xiaojinzi.reactive.demo"
-        minSdk = libs.versions.minSdk.get().toInt()
+        // 仅 demo app 提升到 23：KComponent v2.3.0 的 minSdk 是 23（库模块仍保持 21）
+        minSdk = maxOf(libs.versions.minSdk.get().toInt(), 23)
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
@@ -64,20 +67,18 @@ android {
         targetCompatibility(JavaVersion.VERSION_17)
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
-    composeOptions {
-        // kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
-    }
-
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }
 
 dependencies {

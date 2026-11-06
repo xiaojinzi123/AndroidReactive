@@ -1,11 +1,16 @@
+@file:Suppress("DEPRECATION")
+
 plugins {
     id("commonLibPlugin")
 }
 
 android {
     namespace = "com.xiaojinzi.demo.lib.res"
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 

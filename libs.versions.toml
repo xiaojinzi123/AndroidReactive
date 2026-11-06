@@ -1,25 +1,24 @@
 [versions]
-agp = "8.9.1"
-compileSdk = "36"
-targetSdk = "35"
+agp = "9.3.3"
+compileSdk = "37"
+targetSdk = "37"
 minSdk = "21"
-xiaojinzi-android-support = "v1.0-beta225"
-compose = "1.9.1"
-lifecycle = "2.9.3"
-lottie = "6.6.7"
-kcomponent = "v1.0.8-rc5"
-kotlin = "2.2.10"
-ksp = "2.2.10-2.0.2"
-# kotlinCompilerExtensionVersion = "1.5.15"
+xiaojinzi-android-support = "v1.1.0"
+compose = "1.12.1"
+lifecycle = "2.11.0"
+lottie = "6.7.1"
+kcomponent = "v2.3.0"
+kotlin = "2.4.21"
+ksp = "2.3.13"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.3.0"
 espresso-core = "3.7.0"
-material = "1.13.0"
-publish = "0.0.1"
+material = "1.14.0"
+publish = "1.1.0"
 
 [libraries]
-androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.17.0" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.1" }
+androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.19.1" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.8.0" }
 xiaojinzi-android-support-ktx = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-ktx", version.ref = "xiaojinzi-android-support" }
 xiaojinzi-android-support-annotation = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-annotation", version.ref = "xiaojinzi-android-support" }
 xiaojinzi-android-support-compose = { group = "com.github.xiaojinzi123.AndroidSupport", name = "lib-compose", version.ref = "xiaojinzi-android-support" }
@@ -42,6 +41,9 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# compose 1.8+ 起 material-icons 不再随 material 发布，需要显式依赖（最后版本 1.7.8）
+compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core", version = "1.7.8" }
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

@@ -11,7 +11,6 @@ buildscript {
 plugins {
     id("com.android.application") version libs.versions.agp  apply false
     id("com.android.library") version libs.versions.agp apply false
-    id("org.jetbrains.kotlin.android") version libs.versions.kotlin apply false
     id("org.jetbrains.kotlin.jvm") version libs.versions.kotlin apply false
     id("com.google.devtools.ksp") version libs.versions.ksp apply false
     alias(libs.plugins.compose.compiler) apply false

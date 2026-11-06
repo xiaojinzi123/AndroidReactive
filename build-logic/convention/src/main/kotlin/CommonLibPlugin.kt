@@ -1,4 +1,4 @@
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -10,12 +10,6 @@ open class CommonLibPlugin : Plugin<Project> {
             plugins.apply {
                 if (this.findPlugin("com.android.library") == null) {
                     apply("com.android.library")
-                }
-                if (this.findPlugin("kotlin-android") == null) {
-                    apply("kotlin-android")
-                }
-                if (this.findPlugin("org.jetbrains.kotlin.android") == null) {
-                    apply("org.jetbrains.kotlin.android")
                 }
             }
             extensions.configure<LibraryExtension> {

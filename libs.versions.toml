@@ -1,5 +1,5 @@
 [versions]
-agp = "9.3.3"
+agp = "9.5.1"
 compileSdk = "37"
 targetSdk = "37"
 minSdk = "21"
@@ -46,7 +46,6 @@ material = { group = "com.google.android.material", name = "material", version.r
 compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core", version = "1.7.8" }
 
 [plugins]
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id ="com.android.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

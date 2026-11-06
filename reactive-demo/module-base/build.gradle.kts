@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 plugins {
     id("commonLibPlugin")
     id("com.google.devtools.ksp")

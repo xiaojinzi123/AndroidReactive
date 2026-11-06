@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 plugins {
     id("commonLibPlugin")
 }
